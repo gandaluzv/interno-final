@@ -1,0 +1,47 @@
+<div class="shell">
+
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="bars">
+        <span style="height:40%"></span><span style="height:100%"></span>
+        <span style="height:65%"></span><span style="height:85%"></span>
+      </div>
+      <span>Rytm</span>
+    </div>
+
+    <nav class="side-nav">
+      <a routerLink="/home" class="nav-item on">🏠 Inicio</a>
+      <a routerLink="/musica" class="nav-item">🎵 Música</a>
+      <a routerLink="/libros" class="nav-item">📖 Libros</a>
+      <a routerLink="/pelis" class="nav-item">🎬 Películas</a>
+      <a routerLink="/recomendar" class="nav-item">🎁 Recomendar</a>
+    </nav>
+
+    <div class="sidebar-foot">
+      <div class="mini-avatar">{{ userInitial }}</div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <h1 *ngIf="userName; else saludoInvitado">
+      Hola, {{ userName }} 👋
+    </h1>
+
+    <ng-template #saludoInvitado>
+      <h1>Bienvenido 👋</h1>
+    </ng-template>
+
+    <p class="subtitle">¿Qué quieres ver hoy?</p>
+
+    <div class="logout-link" (click)="logout()">Cerrar sesión</div>
+  </main>
+
+</div>
+
+<nav class="bottom-nav">
+  <a routerLink="/home" class="bn-item on"><span>🏠</span>Inicio</a>
+  <a routerLink="/musica" class="bn-item"><span>🎵</span>Música</a>
+  <a routerLink="/libros" class="bn-item"><span>📖</span>Libros</a>
+  <a routerLink="/pelis" class="bn-item"><span>🎬</span>Películas</a>
+  <a routerLink="/recomendar" class="bn-item"><span>🎁</span>Recomendar</a>
+</nav>

@@ -1,0 +1,30 @@
+<div class="encuesta-view">
+  <div class="encuesta-box">
+
+    <h1>¿Qué te gustaría que te recomendemos?</h1>
+    <p class="subtitle">Elige una o varias opciones. Necesitamos al menos una.</p>
+
+    <div class="option-card" [class.chosen]="seleccion.musica" (click)="elegir('musica')">
+      <span class="icon">🎵</span>
+      <div class="text"><strong>Música</strong><p>Álbumes y canciones para ti</p></div>
+      <span class="check">✓</span>
+    </div>
+
+    <div class="option-card" [class.chosen]="seleccion.libros" (click)="elegir('libros')">
+      <span class="icon">📖</span>
+      <div class="text"><strong>Libros</strong><p>Historias para tu próxima lectura</p></div>
+      <span class="check">✓</span>
+    </div>
+
+    <div class="option-card" [class.chosen]="seleccion.peliculas" (click)="elegir('peliculas')">
+      <span class="icon">🎬</span>
+      <div class="text"><strong>Películas</strong><p>Cine para tu próxima noche libre</p></div>
+      <span class="check">✓</span>
+    </div>
+
+    <p class="error-msg">{{ errorMsg }}</p>
+
+    <button class="btn-primary" (click)="continuar()">Continuar</button>
+
+  </div>
+</div>

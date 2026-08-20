@@ -1,0 +1,79 @@
+:host {
+  --midnight: #f3f4f6;
+  --surface-2: #e9eaf0;
+  --hairline: #d1d5db;
+  --text: #0b0f19;
+  --slate: #6b7280;
+  --purple: #7e22ce;
+  --red: #dc2626;
+  --blue: #2563eb;
+
+  display: block;
+  font-family: sans-serif;
+  color: var(--text);
+}
+
+* { box-sizing: border-box; }
+
+.shell { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 240px;
+  background: #faf9ff;
+  border-right: 1px solid var(--hairline);
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.logo { font-weight: 700; font-size: 20px; display: flex; gap: 8px; margin-bottom: 28px; }
+.bars { display: flex; gap: 3px; height: 18px; }
+.bars span { width: 3px; background: linear-gradient(180deg, var(--red), var(--purple)); }
+
+.side-nav { display: flex; flex-direction: column; gap: 4px; }
+.nav-item { padding: 10px 12px; border-radius: 10px; color: var(--slate); text-decoration: none; }
+.nav-item.on { background: linear-gradient(100deg, rgba(220,38,38,.12), rgba(126,34,206,.12)); font-weight: 600; }
+
+.sidebar-foot { margin-top: auto; }
+.mini-avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--purple), var(--red));
+  color: white; display: flex; justify-content: center; align-items: center;
+}
+
+.main {
+  flex: 1;
+  background: var(--midnight);
+  padding: 24px 40px 90px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.subtitle { color: var(--slate); margin-bottom: 20px; }
+
+.logout-link {
+  margin-top: 20px;
+  color: var(--red);
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: white;
+  border-top: 1px solid var(--hairline);
+  justify-content: space-around;
+  padding: 8px 4px;
+}
+
+.bn-item { display: flex; flex-direction: column; align-items: center; font-size: 10px; color: var(--slate); }
+.bn-item.on { color: var(--red); }
+
+@media (max-width: 760px) {
+  .sidebar { display: none; }
+  .main { padding: 20px 20px 90px; }
+  .bottom-nav { display: flex; }
+}
