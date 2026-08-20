@@ -1,1 +1,81 @@
-<p>recomendar works!</p>
+<div class="shell">
+
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="bars">
+        <span style="height:40%"></span><span style="height:100%"></span>
+        <span style="height:65%"></span><span style="height:85%"></span>
+      </div>
+      <span>Rytm</span>
+    </div>
+
+    <nav class="side-nav">
+      <a routerLink="/home" class="nav-item">🏠 Inicio</a>
+      <a routerLink="/musica" class="nav-item">🎵 Música</a>
+      <a routerLink="/libros" class="nav-item">📖 Libros</a>
+      <a routerLink="/pelis" class="nav-item">🎬 Películas</a>
+      <a routerLink="/recomendar" class="nav-item on">🎁 Recomendar</a>
+    </nav>
+
+    <div class="sidebar-foot">
+      <div class="mini-avatar">{{ userInitial }}</div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <h1>Recomendar contenido</h1>
+    <p class="subtitle">Cuéntanos qué es y a quién se lo quieres mandar</p>
+
+    <div class="form-box">
+
+      <!-- elegir tipo de contenido -->
+      <div class="tipo-tabs">
+        <div class="ttab" [class.on]="tipo==='musica'" (click)="elegirTipo('musica')">🎵 Música</div>
+        <div class="ttab" [class.on]="tipo==='libros'" (click)="elegirTipo('libros')">📖 Libro</div>
+        <div class="ttab" [class.on]="tipo==='pelis'" (click)="elegirTipo('pelis')">🎬 Película</div>
+      </div>
+
+      <div class="field">
+        <label>Título</label>
+        <input type="text" [(ngModel)]="titulo" placeholder="Ej. Midnights" />
+      </div>
+
+      <div class="field">
+        <label>Género</label>
+        <input type="text" [(ngModel)]="genero" placeholder="Ej. Pop" />
+      </div>
+
+      <div class="field">
+        <label>{{ etiquetaAutor }}</label>
+        <input type="text" [(ngModel)]="autor" placeholder="Ej. Taylor Swift" />
+      </div>
+
+      <div class="field">
+        <label>URL de la portada / poster</label>
+        <input type="text" [(ngModel)]="portada" placeholder="https://..." />
+      </div>
+
+      <div class="field">
+        <label>¿A quién se lo mandas?</label>
+        <select [(ngModel)]="destinatarioEmail">
+          <option value="" disabled selected>Elige una persona</option>
+          <option *ngFor="let u of usuarios" [value]="u.email">{{ u.nombre }}</option>
+        </select>
+      </div>
+
+      <p class="error-msg">{{ errorMsg }}</p>
+      <p class="exito-msg" *ngIf="exito">¡Recomendación enviada! 🎉</p>
+
+      <button class="btn-primary" (click)="enviar()">Enviar recomendación</button>
+    </div>
+  </main>
+
+</div>
+
+<nav class="bottom-nav">
+  <a routerLink="/home" class="bn-item"><span>🏠</span>Inicio</a>
+  <a routerLink="/musica" class="bn-item"><span>🎵</span>Música</a>
+  <a routerLink="/libros" class="bn-item"><span>📖</span>Libros</a>
+  <a routerLink="/pelis" class="bn-item"><span>🎬</span>Películas</a>
+  <a routerLink="/recomendar" class="bn-item on"><span>🎁</span>Recomendar</a>
+</nav>

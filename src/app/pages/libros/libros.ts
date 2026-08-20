@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { auth } from '../../services/firebase.config';
+import { auth as firebaseAuth } from '../../services/firebase.config';
 import { ContentService, Recomendacion } from '../../services/content.service';
 
 @Component({
@@ -9,19 +9,19 @@ import { ContentService, Recomendacion } from '../../services/content.service';
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './libros.html',
-  styleUrls: ['./libros.css'],
+  styleUrl: './libros.css',
 })
 export class Libros implements OnInit {
-
   userInitial = 'V';
+
   libros: Recomendacion[] = [];
   indice = 0;
 
   constructor(private content: ContentService) {}
 
   ngOnInit() {
-    const email = auth.currentUser?.email ?? '';
-    this.userInitial = email.charAt(0).toUpperCase() || 'V';
+    const email = firebaseAuth.currentUser?.email ?? '';
+    this.userInitial = email ? email.charAt(0).toUpperCase() : 'V';
     this.libros = this.content.recibidasPor('libros', email);
   }
 
@@ -31,5 +31,10 @@ export class Libros implements OnInit {
 
   siguiente() {
     this.indice++;
+
+    // Si llega al final, reinicia
+    if (this.indice >= this.libros.length) {
+      this.indice = 0;
+    }
   }
 }

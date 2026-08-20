@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-encuesta',
@@ -19,6 +19,8 @@ export class Encuesta {
 
   errorMsg = '';
 
+  constructor(private router: Router) {}
+
   elegir(tipo: 'musica' | 'libros' | 'peliculas') {
     this.seleccion[tipo] = !this.seleccion[tipo];
     this.errorMsg = '';
@@ -32,7 +34,6 @@ export class Encuesta {
       return;
     }
 
-    // navegar a home
-    // o guardar preferencias
+    this.router.navigate(['/home']);
   }
 }

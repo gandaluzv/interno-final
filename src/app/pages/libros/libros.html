@@ -1,1 +1,63 @@
-<p>libros works!</p>
+<div class="shell">
+
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="bars">
+        <span style="height:40%"></span>
+        <span style="height:100%"></span>
+        <span style="height:65%"></span>
+        <span style="height:85%"></span>
+      </div>
+      <span>Rytm</span>
+    </div>
+
+    <nav class="side-nav">
+      <a routerLink="/home" class="nav-item">🏠 Inicio</a>
+      <a routerLink="/musica" class="nav-item">🎵 Música</a>
+      <a routerLink="/libros" class="nav-item on">📖 Libros</a>
+      <a routerLink="/pelis" class="nav-item">🎬 Películas</a>
+      <a routerLink="/recomendar" class="nav-item">🎁 Recomendar</a>
+    </nav>
+
+    <div class="sidebar-foot">
+      <div class="mini-avatar">{{ userInitial }}</div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <a routerLink="/home" class="back-link">← Inicio</a>
+    <h1>Libros</h1>
+    <p class="subtitle">Recomendaciones que te mandaron tus amigos</p>
+
+    <div class="card" *ngIf="actual">
+      <div class="cover">
+        <img *ngIf="actual.portada" [src]="actual.portada" alt="Portada del libro" />
+        <span *ngIf="!actual.portada">📖</span>
+      </div>
+
+      <h2>{{ actual.titulo }}</h2>
+      <p class="autor">{{ actual.autor }}</p>
+      <span class="genero">{{ actual.genero }}</span>
+      <p class="de-quien">Recomendado por {{ actual.deNombre }}</p>
+
+      <div class="botones">
+        <button class="nope" (click)="siguiente()">✖</button>
+        <button class="like" (click)="siguiente()">❤</button>
+      </div>
+    </div>
+
+    <div class="card vacio" *ngIf="!actual">
+      <p>Aún no tienes recomendaciones de libros. Pídele a un amigo que te mande una ✨</p>
+      <a routerLink="/recomendar" class="link-recomendar">Mandar una yo</a>
+    </div>
+  </main>
+
+</div>
+
+<nav class="bottom-nav">
+  <a routerLink="/home" class="bn-item"><span>🏠</span>Inicio</a>
+  <a routerLink="/musica" class="bn-item"><span>🎵</span>Música</a>
+  <a routerLink="/libros" class="bn-item on"><span>📖</span>Libros</a>
+  <a routerLink="/pelis" class="bn-item"><span>🎬</span>Películas</a>
+  <a routerLink="/recomendar" class="bn-item"><span>🎁</span>Recomendar</a>
+</nav>
