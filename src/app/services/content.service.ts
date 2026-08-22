@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
+import { DbService } from './db.service';
+
+export type TipoContenido = 'musica' | 'libros' | 'pelis';
 
 export interface Recomendacion {
-  tipo: 'musica' | 'libros' | 'pelis';
+  tipo: TipoContenido;
   titulo: string;
   autor: string;
   genero: string;
@@ -20,7 +23,7 @@ export interface Usuario {
 })
 export class ContentService {
 
-  private recomendaciones: Recomendacion[] = [];
+  constructor(private db: DbService) {}
 
   private usuariosMock: Usuario[] = [
     { nombre: 'Valentina Ruiz', email: 'valentina@correo.com' },
@@ -32,11 +35,12 @@ export class ContentService {
     return this.usuariosMock.filter(u => u.email !== actualEmail);
   }
 
-  enviarRecomendacion(data: Recomendacion) {
-    this.recomendaciones.push(data);
+  async enviarRecomendacion(data: Recomendacion) {
+    await this.db.guardarRecomendacion(data);
   }
 
-  recibidasPor(tipo: string, email: string): Recomendacion[] {
-    return this.recomendaciones.filter(r => r.tipo === tipo && r.destinatarioEmail === email);
+  async recibidasPor(tipo: TipoContenido, email: string) {
+    const todas = await this.db.obtenerRecomendacionesPorEmail(email);
+    return todas.filter(r => r['tipo'] === tipo);
   }
 }

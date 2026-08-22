@@ -1,1 +1,183 @@
-<p>chat works!</p>
+<div class="shell">
+
+  <!-- ---------- SIDEBAR ---------- -->
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="bars">
+        <span style="height:40%"></span>
+        <span style="height:100%"></span>
+        <span style="height:65%"></span>
+        <span style="height:85%"></span>
+      </div>
+      <span>Rytm</span>
+    </div>
+
+    <nav class="side-nav">
+      <a routerLink="/home" class="nav-item">🏠 Inicio</a>
+      <a routerLink="/musica" class="nav-item">🎵 Música</a>
+      <a routerLink="/libros" class="nav-item">📖 Libros</a>
+      <a routerLink="/pelis" class="nav-item">🎬 Películas</a>
+      <a routerLink="/recomendar" class="nav-item">🎁 Recomendar</a>
+      <a routerLink="/chat" class="nav-item on">💬 Chat</a>
+    </nav>
+
+    <div class="sidebar-foot">
+      <div class="mini-avatar">{{ userInitial }}</div>
+    </div>
+  </aside>
+
+  <!-- ---------- MAIN ---------- -->
+  <main class="main">
+    <h1>Chat</h1>
+    <p class="subtitle">Habla con tu comunidad y crea grupos</p>
+
+    <div class="chat-shell" [class.showing-conv]="chatActivoId">
+
+      <!-- ---------- LISTA DE CHATS ---------- -->
+      <div class="chat-list-col">
+        <div class="chat-list">
+          <div
+            class="chat-row"
+            *ngFor="let chat of chats"
+            [class.on]="chat.id === chatActivoId"
+            (click)="abrirChat(chat.id)"
+          >
+            <div class="cr-avatar" [style.background]="chat.color">
+              {{ chat.esGrupo ? '👥' : chat.nombre.charAt(0) }}
+            </div>
+
+            <div class="cr-info">
+              <div class="cr-name">
+                {{ chat.nombre }}
+                <span class="grp-tag" *ngIf="chat.esGrupo">GRUPO</span>
+              </div>
+
+              <div class="cr-last">{{ ultimoMensaje(chat) }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ---------- CONVERSACIÓN ---------- -->
+      <div class="conv-col" *ngIf="chatActivo; else vacio">
+
+        <div class="conv-top">
+          <span class="back-conv" (click)="volverALaLista()">←</span>
+          {{ chatActivo.nombre }}
+        </div>
+
+        <div class="conv-msgs">
+          <ng-container *ngFor="let m of chatActivo.mensajes">
+
+            <!-- Tarjeta de recomendación -->
+            <div class="msg recommend-card" [class.me]="m.de === 'yo'" *ngIf="m.recomendacion">
+              <div class="rc-icon" [style.background]="m.recomendacion.fondo">
+                {{ m.recomendacion.icono }}
+              </div>
+
+              <div>
+                <span class="sender-tag" *ngIf="m.de !== 'yo' && chatActivo.esGrupo">
+                  {{ m.de }}
+                </span>
+
+                <div class="rc-tag">
+                  Recomendación · {{ etiquetaTipo[m.recomendacion.tipo] }}
+                </div>
+
+                <div class="rc-title">{{ m.recomendacion.titulo }}</div>
+                <div class="rc-who">{{ m.recomendacion.quien }}</div>
+              </div>
+            </div>
+
+            <!-- Mensaje normal -->
+            <div
+              class="msg"
+              [class.me]="m.de === 'yo'"
+              [class.them]="m.de !== 'yo'"
+              *ngIf="!m.recomendacion"
+            >
+              <span class="sender-tag" *ngIf="m.de !== 'yo' && chatActivo.esGrupo">
+                {{ m.de }}
+              </span>
+
+              {{ m.texto }}
+            </div>
+
+          </ng-container>
+        </div>
+
+        <!-- ---------- SELECTOR DE RECOMENDACIONES ---------- -->
+        <div class="recommend-picker" *ngIf="mostrarSelector">
+
+          <div class="recommend-tabs">
+            <div class="rtab" [class.on]="categoriaSelector==='musica'" (click)="elegirCategoria('musica')">
+              🎵 Música
+            </div>
+
+            <div class="rtab" [class.on]="categoriaSelector==='libros'" (click)="elegirCategoria('libros')">
+              📖 Libros
+            </div>
+
+            <div class="rtab" [class.on]="categoriaSelector==='pelis'" (click)="elegirCategoria('pelis')">
+              🎬 Películas
+            </div>
+          </div>
+
+          <div class="recommend-items">
+            <div
+              class="recommend-item-row"
+              *ngFor="let item of catalogo[categoriaSelector]"
+              (click)="enviarRecomendacion(item)"
+            >
+              <div class="ri-icon" [style.background]="item.fondo">
+                {{ item.icono }}
+              </div>
+
+              <div>
+                <div class="ri-title">{{ item.titulo }}</div>
+                <div class="ri-who">{{ item.quien }}</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ---------- INPUT DE MENSAJE ---------- -->
+        <div class="conv-input-row">
+          <div class="recommend-btn" (click)="toggleSelector()" title="Recomendar contenido">
+            🎁
+          </div>
+
+          <input
+            type="text"
+            [(ngModel)]="nuevoMensaje"
+            (keydown.enter)="enviarMensaje()"
+            placeholder="Escribe un mensaje..."
+          />
+
+          <div class="send-btn" (click)="enviarMensaje()">➤</div>
+        </div>
+
+      </div>
+
+      <!-- ---------- VACÍO ---------- -->
+      <ng-template #vacio>
+        <div class="conv-col conv-empty">
+          Elige un chat para empezar a hablar.
+        </div>
+      </ng-template>
+
+    </div>
+  </main>
+
+</div>
+
+<!-- ---------- BOTTOM NAV (MÓVIL) ---------- -->
+<nav class="bottom-nav">
+  <a routerLink="/home" class="bn-item"><span>🏠</span>Inicio</a>
+  <a routerLink="/musica" class="bn-item"><span>🎵</span>Música</a>
+  <a routerLink="/libros" class="bn-item"><span>📖</span>Libros</a>
+  <a routerLink="/pelis" class="bn-item"><span>🎬</span>Películas</a>
+  <a routerLink="/recomendar" class="bn-item"><span>🎁</span>Recomendar</a>
+  <a routerLink="/chat" class="bn-item on"><span>💬</span>Chat</a>
+</nav>

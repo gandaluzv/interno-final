@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 
 import { auth } from '../../services/firebase.config';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from 'firebase/auth';
+
 import { UserService } from '../../services/user.service';
 
 @Component({
@@ -18,14 +19,17 @@ export class Login {
 
   isRegister = false;
 
-  nombre = '';
+  name = '';
   email = '';
   password = '';
 
   errorMsg = '';
   loading = false;
 
-  constructor(private router: Router, private userService: UserService) {}
+  constructor(
+    private router: Router,
+    private userService: UserService
+  ) {}
 
   toggleMode() {
     this.isRegister = !this.isRegister;
@@ -35,12 +39,12 @@ export class Login {
   async submit() {
     this.errorMsg = '';
 
-    if (this.isRegister && !this.nombre) {
+    if (this.isRegister && !this.name.trim()) {
       this.errorMsg = 'Completa tu nombre.';
       return;
     }
 
-    if (!this.email || !this.password) {
+    if (!this.email.trim() || !this.password.trim()) {
       this.errorMsg = 'Completa correo y contraseña.';
       return;
     }
@@ -53,32 +57,53 @@ export class Login {
         const cred = await createUserWithEmailAndPassword(auth, this.email, this.password);
 
         // Guardar nombre en Auth
-        await updateProfile(cred.user, { displayName: this.nombre });
+        await updateProfile(cred.user, { displayName: this.name });
 
-        // Guardar usuario en Firestore con tu estructura
+        // Guardar usuario en Firestore
         await this.userService.crearUsuarioFirestore(
           cred.user.uid,
-          this.nombre,
-          this.email,
-          this.password
+          this.name,
+          this.email
         );
 
       } else {
         // Iniciar sesión
-        await signInWithEmailAndPassword(auth, this.email, this.password);
+        const cred = await signInWithEmailAndPassword(auth, this.email, this.password);
+
+        // Cargar usuario desde Firestore
+        const usuario = await this.userService.obtenerUsuario(cred.user.uid);
+
+        if (!usuario) {
+          this.errorMsg = 'El usuario existe en Auth pero no en Firestore.';
+          return;
+        }
       }
 
+      // Redirección
       this.router.navigate(['/home']);
 
     } catch (error: any) {
-      this.errorMsg = error.message || 'Error al procesar la solicitud.';
       console.error(error);
+
+      switch (error.code) {
+        case 'auth/email-already-in-use':
+          this.errorMsg = 'Este correo ya está registrado.';
+          break;
+        case 'auth/invalid-email':
+          this.errorMsg = 'Correo inválido.';
+          break;
+        case 'auth/weak-password':
+          this.errorMsg = 'La contraseña es muy débil.';
+          break;
+        case 'auth/user-not-found':
+        case 'auth/wrong-password':
+          this.errorMsg = 'Correo o contraseña incorrectos.';
+          break;
+        default:
+          this.errorMsg = 'Ocurrió un error. Intenta nuevamente.';
+      }
     } finally {
       this.loading = false;
     }
   }
-  
 }
-
-console.log(auth.app.name);
-console.log(auth);
