@@ -19,10 +19,10 @@ export class Pelis implements OnInit {
 
   constructor(private content: ContentService) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     const email = firebaseAuth.currentUser?.email ?? '';
     this.userInitial = email ? email.charAt(0).toUpperCase() : 'V';
-    this.peliculas = this.content.recibidasPor('pelis', email);
+    this.peliculas = await this.content.recibidasPor('pelis', email);
   }
 
   get actual(): Recomendacion | null {

@@ -39,6 +39,7 @@ export class Login {
   async submit() {
     this.errorMsg = '';
 
+    // Validaciones
     if (this.isRegister && !this.name.trim()) {
       this.errorMsg = 'Completa tu nombre.';
       return;
@@ -53,13 +54,13 @@ export class Login {
 
     try {
       if (this.isRegister) {
-        // Crear cuenta en Firebase Auth
+        // 1. Crear cuenta en Firebase Auth
         const cred = await createUserWithEmailAndPassword(auth, this.email, this.password);
 
-        // Guardar nombre en Auth
+        // 2. Guardar nombre en Firebase Auth
         await updateProfile(cred.user, { displayName: this.name });
 
-        // Guardar usuario en Firestore
+        // 3. Guardar usuario en Firestore
         await this.userService.crearUsuarioFirestore(
           cred.user.uid,
           this.name,
@@ -67,10 +68,10 @@ export class Login {
         );
 
       } else {
-        // Iniciar sesión
+        // 1. Iniciar sesión con Firebase Auth
         const cred = await signInWithEmailAndPassword(auth, this.email, this.password);
 
-        // Cargar usuario desde Firestore
+        // 2. Cargar usuario desde Firestore
         const usuario = await this.userService.obtenerUsuario(cred.user.uid);
 
         if (!usuario) {
@@ -79,12 +80,13 @@ export class Login {
         }
       }
 
-      // Redirección
+      // Redirección al home
       this.router.navigate(['/home']);
 
     } catch (error: any) {
       console.error(error);
 
+      // Manejo técnico de errores Firebase
       switch (error.code) {
         case 'auth/email-already-in-use':
           this.errorMsg = 'Este correo ya está registrado.';

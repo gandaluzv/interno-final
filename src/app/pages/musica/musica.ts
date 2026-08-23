@@ -19,10 +19,10 @@ export class Musica implements OnInit {
 
   constructor(private content: ContentService) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     const email = auth.currentUser?.email ?? '';
     this.userInitial = email.charAt(0).toUpperCase() || 'V';
-    this.canciones = this.content.recibidasPor('musica', email);
+    this.canciones = await this.content.recibidasPor('musica', email);
   }
 
   get actual(): Recomendacion | null {

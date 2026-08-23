@@ -19,10 +19,10 @@ export class Libros implements OnInit {
 
   constructor(private content: ContentService) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     const email = firebaseAuth.currentUser?.email ?? '';
     this.userInitial = email ? email.charAt(0).toUpperCase() : 'V';
-    this.libros = this.content.recibidasPor('libros', email);
+    this.libros = await this.content.recibidasPor('libros', email);
   }
 
   get actual(): Recomendacion | null {
