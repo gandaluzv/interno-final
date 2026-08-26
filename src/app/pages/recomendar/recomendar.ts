@@ -52,7 +52,7 @@ export class Recomendar implements OnInit {
     this.exito = false;
   }
 
-  enviar() {
+  async enviar() {
     if (!this.titulo.trim() || !this.genero.trim() || !this.autor.trim() || !this.destinatarioEmail) {
       this.errorMsg = 'Completa todos los campos obligatorios.';
       this.exito = false;
@@ -69,13 +69,19 @@ export class Recomendar implements OnInit {
       destinatarioEmail: this.destinatarioEmail,
     };
 
-    this.content.enviarRecomendacion(nuevaRecomendacion);
-    this.exito = true;
     this.errorMsg = '';
-    this.titulo = '';
-    this.genero = '';
-    this.autor = '';
-    this.portada = '';
-    this.destinatarioEmail = '';
+
+    try {
+      await this.content.enviarRecomendacion(nuevaRecomendacion);
+      this.exito = true;
+      this.titulo = '';
+      this.genero = '';
+      this.autor = '';
+      this.portada = '';
+      this.destinatarioEmail = '';
+    } catch {
+      this.exito = false;
+      this.errorMsg = 'No se pudo enviar la recomendación. Inténtalo de nuevo.';
+    }
   }
 }

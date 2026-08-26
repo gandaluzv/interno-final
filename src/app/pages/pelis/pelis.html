@@ -1,62 +1,77 @@
 <div class="shell">
 
   <aside class="sidebar">
-    <div class="logo">
-      <div class="bars">
-        <span style="height:40%"></span><span style="height:100%"></span>
-        <span style="height:65%"></span><span style="height:85%"></span>
-      </div>
-      <span>Rytm</span>
+    <div class="brand-row">
+      <div><h1 class="wordmark">RYTM</h1><p class="brand-sub">Social Discovery</p></div>
+      <div class="star-badge">✦</div>
     </div>
-
     <nav class="side-nav">
-      <a routerLink="/home" class="nav-item">🏠 Inicio</a>
-      <a routerLink="/musica" class="nav-item">🎵 Música</a>
-      <a routerLink="/libros" class="nav-item">📖 Libros</a>
-      <a routerLink="/pelis" class="nav-item">🎬 Películas</a>
-      <a routerLink="/recomendar" class="nav-item">🎁 Recomendar</a>
-      <a routerLink="/chat" class="nav-item on">💬 Chat</a>
+      <a routerLink="/home" class="nav-item"><span>🏠</span>Inicio</a>
+      <a routerLink="/musica" class="nav-item"><span>🎵</span>Música</a>
+      <a routerLink="/libros" class="nav-item"><span>📚</span>Libros</a>
+      <a routerLink="/pelis" class="nav-item on"><span>🎬</span>Películas</a>
+      <a routerLink="/recomendar" class="nav-item"><span>🎁</span>Recomendar</a>
+      <a routerLink="/chat" class="nav-item"><span>💬</span>Chat</a>
     </nav>
-
-    <div class="sidebar-foot">
-      <div class="mini-avatar">{{ userInitial }}</div>
-    </div>
+    <div class="sidebar-foot"><div class="mini-avatar">{{ userInitial }}</div></div>
   </aside>
 
   <main class="main">
-    <a routerLink="/home" class="back-link">← Inicio</a>
-    <h1>Películas</h1>
-    <p class="subtitle">Recomendaciones que te mandaron tus amigos</p>
 
-    <div class="card" *ngIf="actual">
-      <div class="cover">
-        <img *ngIf="actual.portada" [src]="actual.portada" alt="" />
-        <span *ngIf="!actual.portada">🎬</span>
-      </div>
-      <h2>{{ actual.titulo }}</h2>
-      <p class="director">{{ actual.autor }}</p>
-      <span class="genero">{{ actual.genero }}</span>
-      <p class="de-quien">Recomendado por {{ actual.deNombre }}</p>
-
-      <div class="botones">
-        <button class="nope" (click)="siguiente()">✖</button>
-        <button class="like" (click)="siguiente()">❤</button>
+    <div class="cat-header">
+      <div class="cat-header-left">
+        <div class="cat-header-icon">🎬</div>
+        <div>
+          <h1>Descubrimiento: Películas</h1>
+        </div>
       </div>
     </div>
 
-    <div class="card vacio" *ngIf="!actual">
-      <p>Aún no tienes recomendaciones de películas. Pídele a un amigo que te mande una ✨</p>
-      <a routerLink="/recomendar" class="link-recomendar">Mandar una yo</a>
+    <div class="deck" *ngIf="actual; else vacio">
+      <div class="poster-card">
+        <div class="poster-cover">
+          <img *ngIf="actual.portada" [src]="actual.portada" alt="" />
+          <span *ngIf="!actual.portada" class="poster-fallback">🎬</span>
+          <div class="poster-vignette"></div>
+
+          <span class="poster-badge-top">🎁 De {{ actual.deNombre }}</span>
+
+          <div class="poster-text">
+            <span class="poster-genre">{{ actual.genero }}</span>
+            <h2>{{ actual.titulo }}</h2>
+            <p>{{ actual.autor }}</p>
+          </div>
+        </div>
+
+        <div class="poster-body">
+          <p class="poster-desc">Una recomendación que {{ actual.deNombre }} pensó que te iba a gustar.</p>
+        </div>
+
+        <div class="poster-actions">
+          <button class="btn-dislike" (click)="siguiente()">✕</button>
+          <button class="btn-like" (click)="siguiente()">❤️</button>
+        </div>
+      </div>
     </div>
+
+    <ng-template #vacio>
+      <div class="empty-card">
+        <div class="empty-icon">✨</div>
+        <h3>¡Has explorado todo por ahora!</h3>
+        <p>Revisaste todas las recomendaciones pendientes de películas. Puedes reiniciar el feed o mandarle una a alguien.</p>
+        <div class="empty-actions">
+        </div>
+      </div>
+    </ng-template>
+
   </main>
-
 </div>
 
 <nav class="bottom-nav">
   <a routerLink="/home" class="bn-item"><span>🏠</span>Inicio</a>
   <a routerLink="/musica" class="bn-item"><span>🎵</span>Música</a>
-  <a routerLink="/libros" class="bn-item"><span>📖</span>Libros</a>
-  <a routerLink="/pelis" class="bn-item"><span>🎬</span>Películas</a>
+  <a routerLink="/libros" class="bn-item"><span>📚</span>Libros</a>
+  <a routerLink="/pelis" class="bn-item on"><span>🎬</span>Películas</a>
   <a routerLink="/recomendar" class="bn-item"><span>🎁</span>Recomendar</a>
-  <a routerLink="/chat" class="bn-item on"><span>💬</span>Chat</a>
+  <a routerLink="/chat" class="bn-item"><span>💬</span>Chat</a>
 </nav>

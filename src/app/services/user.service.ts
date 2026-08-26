@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { db } from '../services/firebase.config';
+import { db } from './firebase.config';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 
 export interface UsuarioFirestore {

@@ -1,49 +1,117 @@
 <div class="shell">
 
+  <!-- ---------- barra lateral (escritorio) ---------- -->
   <aside class="sidebar">
-    <div class="logo">
-      <div class="bars">
-        <span style="height:40%"></span><span style="height:100%"></span>
-        <span style="height:65%"></span><span style="height:85%"></span>
+    <div class="brand-row">
+      <div>
+        <h1 class="wordmark">RYTM</h1>
       </div>
-      <span>Rytm</span>
+      <div class="star-badge">✦</div>
+    </div>
+
+    <div class="user-switcher">
+      <div class="mini-avatar">{{ userInitial }}</div>
+      <div>
+        <p class="us-name">{{ userName }}</p>
+        <p class="us-email">{{ userEmail }}</p>
+      </div>
     </div>
 
     <nav class="side-nav">
-      <a routerLink="/home" class="nav-item">🏠 Inicio</a>
-      <a routerLink="/musica" class="nav-item">🎵 Música</a>
-      <a routerLink="/libros" class="nav-item">📖 Libros</a>
-      <a routerLink="/pelis" class="nav-item">🎬 Películas</a>
-      <a routerLink="/recomendar" class="nav-item">🎁 Recomendar</a>
-      <a routerLink="/chat" class="nav-item on">💬 Chat</a>
+      <a routerLink="/home" class="nav-item on"><span>🏠</span>Inicio</a>
+      <a routerLink="/musica" class="nav-item"><span>🎵</span>Música</a>
+      <a routerLink="/libros" class="nav-item"><span>📚</span>Libros</a>
+      <a routerLink="/pelis" class="nav-item"><span>🎬</span>Películas</a>
+      <a routerLink="/recomendar" class="nav-item"><span>🎁</span>Recomendar</a>
+      <a routerLink="/chat" class="nav-item"><span>💬</span>Chat</a>
     </nav>
 
     <div class="sidebar-foot">
-      <div class="mini-avatar">{{ userInitial }}</div>
+      <div class="logout-link" (click)="logout()">🚪 Cerrar sesión</div>
     </div>
   </aside>
 
+  <!-- ---------- contenido principal ---------- -->
   <main class="main">
-    <h1 *ngIf="userName; else saludoInvitado">
-      Hola, {{ userName }} 👋
-    </h1>
 
-    <ng-template #saludoInvitado>
-      <h1>Bienvenido 👋</h1>
-    </ng-template>
+    <header class="greet-header">
+      <div>
+        <h1>¡Hola, {{ userName }}! 👋</h1>
+        <p>Hoy tenemos algo especial para tu colección cultural.</p>
+      </div>
+      <div class="metric-row">
+        <div class="metric"><p class="m-label">Gustos</p><p class="m-value purple">3 activos</p></div>
+        <div class="metric"><p class="m-label">Colección</p><p class="m-value red">0 likes</p></div>
+        <div class="metric"><p class="m-label">Comunidad</p><p class="m-value blue">3 amigos</p></div>
+      </div>
+    </header>
 
-    <p class="subtitle">¿Qué quieres ver hoy?</p>
+    <div class="section-head">
+      <h2>Tus categorías activas</h2>
+      <span class="update-link" routerLink="/encuesta">⚙️ Actualizar gustos</span>
+    </div>
 
-    <div class="logout-link" (click)="logout()">Cerrar sesión</div>
+    <div class="cat-grid">
+      <div class="cat-card" routerLink="/musica">
+        <div class="cat-cover cover-musica">
+          <span class="cat-icon">🎵</span>
+        </div>
+        <div class="cat-body">
+          <div>
+            <h3>Música &amp; Sonido</h3>
+            <p>Álbumes y canciones que te mandan tus amigos.</p>
+          </div>
+          <button class="cat-btn">Explorar Música →</button>
+        </div>
+      </div>
+
+      <div class="cat-card" routerLink="/libros">
+        <div class="cat-cover cover-libros">
+          <span class="cat-icon">📚</span>
+        </div>
+        <div class="cat-body">
+          <div>
+            <h3>Libros &amp; Literatura</h3>
+            <p>Lecturas basadas en lo que a tus amigos les gustó.</p>
+          </div>
+          <button class="cat-btn">Explorar Libros →</button>
+        </div>
+      </div>
+
+      <div class="cat-card" routerLink="/pelis">
+        <div class="cat-cover cover-pelis">
+          <span class="cat-icon">🎬</span>
+        </div>
+        <div class="cat-body">
+          <div>
+            <h3>Cine &amp; Películas</h3>
+            <p>Recomendaciones directas de tu comunidad.</p>
+          </div>
+          <button class="cat-btn">Explorar Películas →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-cta">
+      <div class="chat-cta-left">
+        <div class="chat-cta-icon">💬</div>
+        <div>
+          <h3>Comparte recomendaciones en el Chat</h3>
+          <p>Envía tarjetas de tus películas, canciones o libros favoritos a tus amigos.</p>
+        </div>
+      </div>
+      <button class="chat-cta-btn" routerLink="/chat">Abrir Comunidad &amp; Chat →</button>
+    </div>
+
   </main>
-
 </div>
 
+<!-- ---------- barra inferior (móvil) ---------- -->
 <nav class="bottom-nav">
-  <a routerLink="/home" class="bn-item"><span>🏠</span>Inicio</a>
+  <a routerLink="/home" class="bn-item on"><span>🏠</span>Inicio</a>
   <a routerLink="/musica" class="bn-item"><span>🎵</span>Música</a>
-  <a routerLink="/libros" class="bn-item"><span>📖</span>Libros</a>
+  <a routerLink="/libros" class="bn-item"><span>📚</span>Libros</a>
   <a routerLink="/pelis" class="bn-item"><span>🎬</span>Películas</a>
   <a routerLink="/recomendar" class="bn-item"><span>🎁</span>Recomendar</a>
-  <a routerLink="/chat" class="bn-item on"><span>💬</span>Chat</a>
+  <a routerLink="/chat" class="bn-item"><span>💬</span>Chat</a>
 </nav>

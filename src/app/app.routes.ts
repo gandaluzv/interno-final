@@ -8,6 +8,7 @@ import { Libros } from './pages/libros/libros';
 import { Recomendar } from './pages/recomendar/recomendar';
 import { Prueba } from './pages/prueba/prueba';
 import { Chat } from './pages/chat/chat';
+import { Cuenta} from './pages/cuenta/cuenta';
 
 export const routes: Routes = [
     { path: 'home', component: Home },
@@ -19,6 +20,7 @@ export const routes: Routes = [
     { path: 'recomendar', component: Recomendar },
     { path: 'prueba', component: Prueba },  
     { path: 'chat', component: Chat },
-    { path: '', redirectTo: 'home', pathMatch: 'full' }
+    { path: 'cuenta', component: Cuenta },
+    { path: '', redirectTo: 'login', pathMatch: 'full' }
 ];
     

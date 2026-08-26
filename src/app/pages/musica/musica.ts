@@ -31,5 +31,8 @@ export class Musica implements OnInit {
 
   siguiente() {
     this.indice++;
+    if (this.indice >= this.canciones.length) {
+      this.indice = 0;
+    }
   }
 }
