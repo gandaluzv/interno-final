@@ -1,3 +1,5 @@
+import { AuthGuard } from './guards/auth.guard';
+
 import { Routes } from '@angular/router';
 import { Home } from './pages/home/home';
 import { Login } from './pages/login/login';
@@ -11,16 +13,17 @@ import { Chat } from './pages/chat/chat';
 import { Cuenta} from './pages/cuenta/cuenta';
 
 export const routes: Routes = [
-    { path: 'home', component: Home },
+    { path: 'home', component: Home, canActivate: [AuthGuard] },
     { path: 'login', component: Login },
-    { path: 'encuesta', component: Encuesta },
-    { path: 'musica', component: Musica },
-    { path: 'pelis', component: Pelis },
-    { path: 'libros', component: Libros },
-    { path: 'recomendar', component: Recomendar },
-    { path: 'prueba', component: Prueba },  
-    { path: 'chat', component: Chat },
-    { path: 'cuenta', component: Cuenta },
+
+    { path: 'encuesta', component: Encuesta, canActivate: [AuthGuard] },
+    { path: 'musica', component: Musica, canActivate: [AuthGuard] },
+    { path: 'pelis', component: Pelis, canActivate: [AuthGuard] },
+    { path: 'libros', component: Libros, canActivate: [AuthGuard] },
+    { path: 'recomendar', component: Recomendar, canActivate: [AuthGuard] },
+    { path: 'prueba', component: Prueba, canActivate: [AuthGuard] },
+    { path: 'chat', component: Chat, canActivate: [AuthGuard] },
+    { path: 'cuenta', component: Cuenta, canActivate: [AuthGuard] },
+
     { path: '', redirectTo: 'login', pathMatch: 'full' }
 ];
-    

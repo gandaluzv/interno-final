@@ -1,1 +1,36 @@
-<p>cuenta works!</p>
+<div class="cuenta-container">
+
+  <h2>Configuración de la cuenta</h2>
+
+  <!-- Información personal -->
+  <div class="card">
+    <h3>Información personal</h3>
+
+    <label>Nombre</label>
+    <input [(ngModel)]="userName" />
+
+    <label>Correo</label>
+    <input [value]="userEmail" disabled />
+
+    <label>Rol</label>
+    <input [value]="rol" disabled />
+
+    <button class="btn-save" (click)="guardarNombre()">Guardar nombre</button>
+  </div>
+
+
+  <!-- Seguridad -->
+  <div class="card">
+    <h3>Seguridad</h3>
+
+    <button class="btn-reset" (click)="cambiarPassword()">Cambiar contraseña</button>
+    <button class="btn-delete" (click)="eliminarCuenta()">Eliminar cuenta</button>
+  </div>
+
+  <!-- Sesión -->
+  <div class="card">
+    <h3>Sesión</h3>
+    <button class="btn-logout" (click)="logout()">Cerrar sesión</button>
+  </div>
+
+</div>

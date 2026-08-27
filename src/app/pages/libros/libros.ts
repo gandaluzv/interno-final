@@ -12,6 +12,9 @@ import { ContentService, Recomendacion } from '../../services/content.service';
   styleUrl: './libros.css',
 })
 export class Libros implements OnInit {
+  userName = '';
+  userEmail = '';
+  preferencias = { musica: true, libros: true, peliculas: true };
   userInitial = 'V';
 
   libros: Recomendacion[] = [];
@@ -20,9 +23,16 @@ export class Libros implements OnInit {
   constructor(private content: ContentService) {}
 
   async ngOnInit() {
-    const email = firebaseAuth.currentUser?.email ?? '';
+    const user = firebaseAuth.currentUser;
+    const email = user?.email ?? '';
+    this.userEmail = email;
+    this.userName = user?.displayName ?? email.split('@')[0] ?? '';
     this.userInitial = email ? email.charAt(0).toUpperCase() : 'V';
     this.libros = await this.content.recibidasPor('libros', email);
+  }
+
+  logout() {
+    firebaseAuth.signOut();
   }
 
   get actual(): Recomendacion | null {

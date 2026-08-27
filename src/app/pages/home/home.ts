@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
 import { auth } from '../../services/firebase.config';
-import { UserService, UsuarioFirestore } from '../../services/user.service';
+import { onAuthStateChanged } from 'firebase/auth';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-home',
@@ -12,32 +13,44 @@ import { UserService, UsuarioFirestore } from '../../services/user.service';
   templateUrl: './home.html',
   styleUrls: ['./home.css'],
 })
-export class Home implements OnInit {
+export class Home {
 
   userName = '';
   userEmail = '';
   userInitial = '';
 
-  constructor(private userService: UserService) {}
+  preferencias = {
+    musica: false,
+    libros: false,
+    peliculas: false
+  };
 
-  async ngOnInit() {
-    const user = auth.currentUser;
-    if (!user) return;
+  constructor(
+    private userService: UserService,
+    private cdr: ChangeDetectorRef
+  ) {
 
-    this.userEmail = user.email ?? '';
+    onAuthStateChanged(auth, async (user) => {
 
-    // Obtener datos reales desde Firestore
-    const perfil = await this.userService.obtenerUsuario(user.uid);
+      if (!user) return;
 
-    if (perfil) {
-      this.userName = perfil.usuario;
-      this.userEmail = perfil.email;
-    } else {
-      // fallback si Firestore no tiene datos
-      this.userName = user.displayName ?? this.userEmail.split('@')[0];
-    }
+      this.userEmail = user.email ?? '';
 
-    this.userInitial = this.userName.charAt(0).toUpperCase();
+      const perfil = await this.userService.obtenerUsuario(user.uid);
+
+      if (perfil) {
+        this.userName = perfil.usuario;
+        this.userEmail = perfil.email;
+        this.preferencias = perfil.preferencias;
+      } else {
+        this.userName = user.displayName ?? this.userEmail.split('@')[0];
+      }
+
+      this.userInitial = this.userName.charAt(0).toUpperCase();
+
+      // ⭐ CLAVE: Forzar a Angular a refrescar la vista
+      this.cdr.detectChanges();
+    });
   }
 
   logout() {

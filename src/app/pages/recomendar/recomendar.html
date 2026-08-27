@@ -2,18 +2,44 @@
 
   <aside class="sidebar">
     <div class="brand-row">
-      <div><h1 class="wordmark">RYTM</h1><p class="brand-sub">Social Discovery</p></div>
+      <div>
+        <h1 class="wordmark">RYTM</h1>
+      </div>
       <div class="star-badge">✦</div>
     </div>
+
+    <div class="user-switcher">
+      <div class="mini-avatar">{{ userInitial }}</div>
+      <div>
+        <p class="us-name">{{ userName }}</p>
+        <p class="us-email">{{ userEmail }}</p>
+      </div>
+    </div>
+
     <nav class="side-nav">
-      <a routerLink="/home" class="nav-item"><span>🏠</span>Inicio</a>
-      <a routerLink="/musica" class="nav-item"><span>🎵</span>Música</a>
-      <a routerLink="/libros" class="nav-item"><span>📚</span>Libros</a>
-      <a routerLink="/pelis" class="nav-item"><span>🎬</span>Películas</a>
-      <a routerLink="/recomendar" class="nav-item on"><span>🎁</span>Recomendar</a>
+      <a routerLink="/home" class="nav-item on"><span>🏠</span>Inicio</a>
+
+      <!-- Preferencias dinámicas -->
+      <a *ngIf="preferencias.musica" routerLink="/musica" class="nav-item">
+        <span>🎵</span>Música
+      </a>
+
+      <a *ngIf="preferencias.libros" routerLink="/libros" class="nav-item">
+        <span>📚</span>Libros
+      </a>
+
+      <a *ngIf="preferencias.peliculas" routerLink="/pelis" class="nav-item">
+        <span>🎬</span>Películas
+      </a>
+
+      <!-- Siempre visibles -->
+      <a routerLink="/recomendar" class="nav-item"><span>🎁</span>Recomendar</a>
       <a routerLink="/chat" class="nav-item"><span>💬</span>Chat</a>
     </nav>
-    <div class="sidebar-foot"><div class="mini-avatar">{{ userInitial }}</div></div>
+
+    <div class="sidebar-foot">
+      <div class="logout-link" (click)="logout()">🚪 Cerrar sesión</div>
+    </div>
   </aside>
 
   <main class="main">

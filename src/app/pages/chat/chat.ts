@@ -36,6 +36,9 @@ interface ChatData {
 export class Chat implements OnInit {
 
   userInitial = 'V';
+  userName = '';
+  userEmail = '';
+  preferencias = { musica: true, libros: true, peliculas: true };
   userNombre = '';
 
   catalogo: Record<TipoContenido, ItemCatalogo[]> = {
@@ -104,9 +107,16 @@ export class Chat implements OnInit {
   constructor(private content: ContentService) {}
 
   ngOnInit() {
-    const email = auth.currentUser?.email ?? '';
+    const user = auth.currentUser;
+    const email = user?.email ?? '';
+    this.userEmail = email;
+    this.userName = user?.displayName ?? email.split('@')[0] ?? '';
     this.userInitial = email.charAt(0).toUpperCase() || 'V';
-    this.userNombre = email.split('@')[0];
+    this.userNombre = this.userName;
+  }
+
+  logout() {
+    auth.signOut();
   }
 
   get chatActivo(): ChatData | undefined {

@@ -1,38 +1,61 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
+
+import { auth } from '../../services/firebase.config';
+import { db } from '../../services/firebase.config';
+import { doc, updateDoc } from 'firebase/firestore';
 
 @Component({
   selector: 'app-encuesta',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule],
   templateUrl: './encuesta.html',
-  styleUrls: ['./encuesta.css'],
+  styleUrls: ['./encuesta.css']
 })
 export class Encuesta {
 
+  // ✔ Esto es lo que tu HTML necesita
   seleccion = {
     musica: false,
     libros: false,
-    peliculas: false,
+    peliculas: false
   };
 
   errorMsg = '';
 
   constructor(private router: Router) {}
 
-  elegir(tipo: 'musica' | 'libros' | 'peliculas') {
-    this.seleccion[tipo] = !this.seleccion[tipo];
-    this.errorMsg = '';
+  // ✔ Este método lo usa tu HTML
+  elegir(opcion: 'musica' | 'libros' | 'peliculas') {
+    this.seleccion[opcion] = !this.seleccion[opcion];
   }
 
-  continuar() {
-    const alguna = this.seleccion.musica || this.seleccion.libros || this.seleccion.peliculas;
+  // ✔ Este método lo usa tu HTML
+  async continuar() {
+    const { musica, libros, peliculas } = this.seleccion;
 
-    if (!alguna) {
-      this.errorMsg = 'Elige al menos una opción.';
+    if (!musica && !libros && !peliculas) {
+      this.errorMsg = 'Selecciona al menos una opción.';
       return;
     }
+
+    const user = auth.currentUser;
+    if (!user) {
+      this.errorMsg = 'No hay usuario autenticado.';
+      return;
+    }
+
+    const ref = doc(db, 'usuarios', user.uid);
+
+    await updateDoc(ref, {
+      encuestaCompletada: true,
+      preferencias: {
+        musica,
+        libros,
+        peliculas
+      }
+    });
 
     this.router.navigate(['/home']);
   }

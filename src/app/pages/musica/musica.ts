@@ -13,6 +13,9 @@ import { ContentService, Recomendacion } from '../../services/content.service';
 })
 export class Musica implements OnInit {
 
+  userName = '';
+  userEmail = '';
+  preferencias = { musica: true, libros: true, peliculas: true };
   userInitial = 'V';
   canciones: Recomendacion[] = [];
   indice = 0;
@@ -20,9 +23,16 @@ export class Musica implements OnInit {
   constructor(private content: ContentService) {}
 
   async ngOnInit() {
-    const email = auth.currentUser?.email ?? '';
+    const user = auth.currentUser;
+    const email = user?.email ?? '';
+    this.userEmail = email;
+    this.userName = user?.displayName ?? email.split('@')[0] ?? '';
     this.userInitial = email.charAt(0).toUpperCase() || 'V';
     this.canciones = await this.content.recibidasPor('musica', email);
+  }
+
+  logout() {
+    auth.signOut();
   }
 
   get actual(): Recomendacion | null {

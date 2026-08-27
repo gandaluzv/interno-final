@@ -39,7 +39,6 @@ export class Login {
   async submit() {
     this.errorMsg = '';
 
-    // Validaciones
     if (this.isRegister && !this.name.trim()) {
       this.errorMsg = 'Completa tu nombre.';
       return;
@@ -54,39 +53,48 @@ export class Login {
 
     try {
       if (this.isRegister) {
-        // 1. Crear cuenta en Firebase Auth
+        // Crear cuenta en Firebase Auth
         const cred = await createUserWithEmailAndPassword(auth, this.email, this.password);
 
-        // 2. Guardar nombre en Firebase Auth
+        // Guardar nombre en Firebase Auth
         await updateProfile(cred.user, { displayName: this.name });
 
-        // 3. Guardar usuario en Firestore
+        // Crear usuario en Firestore
         await this.userService.crearUsuarioFirestore(
           cred.user.uid,
           this.name,
           this.email
         );
 
+        // Usuario nuevo → encuesta
+        this.router.navigate(['/encuesta']);
+        return;
+
       } else {
-        // 1. Iniciar sesión con Firebase Auth
+        // Iniciar sesión
         const cred = await signInWithEmailAndPassword(auth, this.email, this.password);
 
-        // 2. Cargar usuario desde Firestore
+        // Cargar usuario desde Firestore
         const usuario = await this.userService.obtenerUsuario(cred.user.uid);
 
         if (!usuario) {
           this.errorMsg = 'El usuario existe en Auth pero no en Firestore.';
           return;
         }
-      }
 
-      // Redirección al home
-      this.router.navigate(['/home']);
+        // Decidir a dónde enviarlo
+        if (usuario.encuestaCompletada === true) {
+          this.router.navigate(['/home']);
+        } else {
+          this.router.navigate(['/encuesta']);
+        }
+
+        return;
+      }
 
     } catch (error: any) {
       console.error(error);
 
-      // Manejo técnico de errores Firebase
       switch (error.code) {
         case 'auth/email-already-in-use':
           this.errorMsg = 'Este correo ya está registrado.';
@@ -104,6 +112,7 @@ export class Login {
         default:
           this.errorMsg = 'Ocurrió un error. Intenta nuevamente.';
       }
+
     } finally {
       this.loading = false;
     }

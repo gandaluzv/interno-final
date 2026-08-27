@@ -1,125 +1,36 @@
 :host {
-  --midnight: #f3f4f6;
-  --surface: #ffffff;
-  --surface-2: #e9eaf0;
-  --hairline: #d1d5db;
-  --text: #0b0f19;
-  --slate: #6b7280;
-  --purple: #7e22ce;
-  --red: #dc2626;
-  --blue: #2563eb;
+  --bg: #F8F9FC;
+  --surface-2: #F3F4F6;
+  --hairline: #D1D5DB;
+  --text: #0B0F19;
+  --slate: #6B7280;
+  --purple: #7E22CE;
+  --red: #DC2626;
 
   display: block;
-  font-family: sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   color: var(--text);
 }
-
 * { box-sizing: border-box; }
 
-/* ---------- layout ---------- */
-.encuesta-view {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: var(--midnight);
-  padding: 40px;
-}
+.encuesta-view { min-height: 100vh; background: var(--bg); display: flex; align-items: center; justify-content: center; padding: 24px; }
 
-/* ---------- caja principal ---------- */
-.encuesta-box {
-  width: 100%;
-  max-width: 420px;
-  background: white;
-  border: 1px solid var(--hairline);
-  border-radius: 20px;
-  padding: 32px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
-}
+.encuesta-card { width: 100%; max-width: 440px; background: white; border: 1px solid var(--hairline); border-radius: 32px; padding: 40px 32px; text-align: center; }
 
-h1 {
-  margin: 0 0 6px;
-  font-size: 24px;
-  font-weight: 700;
-}
+.e-icon { width: 56px; height: 56px; border-radius: 18px; background: #FAF5FF; color: var(--purple); display: flex; align-items: center; justify-content: center; font-size: 26px; margin: 0 auto 16px; }
 
-.subtitle {
-  color: var(--slate);
-  margin: 0 0 24px;
-  font-size: 14px;
-}
+h1 { font-size: 22px; font-weight: 900; margin: 0 0 8px; letter-spacing: -.01em; }
+.subtitle { color: var(--slate); font-size: 13px; font-weight: 600; margin: 0 0 26px; }
 
-/* ---------- opción ---------- */
-.option-card {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 16px;
-  border: 1px solid var(--hairline);
-  border-radius: 14px;
-  margin-bottom: 14px;
-  cursor: pointer;
-  background: var(--surface);
-  transition: all 0.2s ease;
-}
+.option-card { display: flex; align-items: center; gap: 14px; text-align: left; background: var(--surface-2); border: 1px solid var(--hairline); border-radius: 18px; padding: 16px; margin-bottom: 12px; cursor: pointer; transition: border-color .15s, background .15s; }
+.option-card.chosen { border-color: var(--purple); background: #FAF5FF; }
+.option-card .icon { font-size: 24px; }
+.option-card strong { display: block; font-size: 14px; }
+.option-card p { margin: 2px 0 0; font-size: 11.5px; color: var(--slate); font-weight: 600; }
 
-.option-card:hover {
-  border-color: var(--purple);
-}
+.check { margin-left: auto; width: 24px; height: 24px; border-radius: 8px; border: 1px solid var(--hairline); display: flex; align-items: center; justify-content: center; color: transparent; flex-shrink: 0; font-weight: 900; }
+.option-card.chosen .check { background: linear-gradient(100deg, var(--red), var(--purple)); border-color: transparent; color: #fff; }
 
-.option-card.chosen {
-  background: linear-gradient(100deg, var(--red), var(--purple));
-  color: white;
-  border-color: transparent;
-}
+.error-msg { color: var(--red); font-size: 12.5px; min-height: 16px; margin: 4px 0 0; font-weight: 700; }
 
-.icon {
-  font-size: 26px;
-}
-
-.text strong {
-  font-size: 15px;
-}
-
-.text p {
-  margin: 2px 0 0;
-  font-size: 13px;
-  color: var(--slate);
-}
-
-.option-card.chosen .text p {
-  color: #f3f4f6;
-}
-
-.check {
-  margin-left: auto;
-  font-size: 18px;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-
-.option-card.chosen .check {
-  opacity: 1;
-}
-
-/* ---------- error ---------- */
-.error-msg {
-  color: var(--red);
-  margin-top: 10px;
-  min-height: 18px;
-  font-size: 13px;
-}
-
-/* ---------- botón ---------- */
-.btn-primary {
-  width: 100%;
-  padding: 14px;
-  border: none;
-  border-radius: 14px;
-  background: linear-gradient(100deg, var(--red), var(--purple));
-  color: white;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  margin-top: 10px;
-}
+.btn-primary { margin-top: 14px; width: 100%; padding: 15px; border: none; border-radius: 16px; background: linear-gradient(100deg, var(--red), var(--purple)); color: white; font-size: 14px; font-weight: 900; cursor: pointer; font-family: inherit; }

@@ -13,6 +13,9 @@ import { ContentService, Recomendacion, Usuario } from '../../services/content.s
   styleUrls: ['./recomendar.css'],
 })
 export class Recomendar implements OnInit {
+  userName = '';
+  userEmail = '';
+  preferencias = { musica: true, libros: true, peliculas: true };
   userInitial = 'V';
 
   tipo: 'musica' | 'libros' | 'pelis' = 'musica';
@@ -28,9 +31,16 @@ export class Recomendar implements OnInit {
   constructor(private content: ContentService) {}
 
   ngOnInit() {
-    const email = auth.currentUser?.email ?? '';
+    const user = auth.currentUser;
+    const email = user?.email ?? '';
+    this.userEmail = email;
+    this.userName = user?.displayName ?? email.split('@')[0] ?? '';
     this.userInitial = email ? email.charAt(0).toUpperCase() : 'V';
     this.usuarios = this.content.listaUsuarios(email);
+  }
+
+  logout() {
+    auth.signOut();
   }
 
   get etiquetaAutor(): string {
