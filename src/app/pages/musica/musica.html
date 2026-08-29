@@ -17,10 +17,10 @@
     </div>
 
     <nav class="side-nav">
-      <a routerLink="/home" class="nav-item on"><span>🏠</span>Inicio</a>
+      <a routerLink="/home" class="nav-item"><span>🏠</span>Inicio</a>
 
       <!-- Preferencias dinámicas -->
-      <a *ngIf="preferencias.musica" routerLink="/musica" class="nav-item">
+      <a *ngIf="preferencias.musica" routerLink="/musica" class="nav-item on">
         <span>🎵</span>Música
       </a>
 

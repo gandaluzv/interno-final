@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+
 import { auth } from '../../services/firebase.config';
-import { ContentService, Recomendacion } from '../../services/content.service';
+import { onAuthStateChanged } from 'firebase/auth';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-musica',
@@ -11,38 +13,47 @@ import { ContentService, Recomendacion } from '../../services/content.service';
   templateUrl: './musica.html',
   styleUrls: ['./musica.css'],
 })
-export class Musica implements OnInit {
+export class Musica {
 
   userName = '';
   userEmail = '';
-  preferencias = { musica: true, libros: true, peliculas: true };
-  userInitial = 'V';
-  canciones: Recomendacion[] = [];
-  indice = 0;
+  userInitial = '';
 
-  constructor(private content: ContentService) {}
+  preferencias = {
+    musica: false,
+    libros: false,
+    peliculas: false
+  };
 
-  async ngOnInit() {
-    const user = auth.currentUser;
-    const email = user?.email ?? '';
-    this.userEmail = email;
-    this.userName = user?.displayName ?? email.split('@')[0] ?? '';
-    this.userInitial = email.charAt(0).toUpperCase() || 'V';
-    this.canciones = await this.content.recibidasPor('musica', email);
+  actual: any = null;
+
+  constructor(
+    private userService: UserService,
+    private cdr: ChangeDetectorRef
+  ) {
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) return;
+
+      const perfil = await this.userService.obtenerUsuario(user.uid);
+
+      if (perfil) {
+        this.userName = perfil.usuario;
+        this.userEmail = perfil.email;
+        this.preferencias = perfil.preferencias;
+      }
+
+      this.userInitial = this.userName.charAt(0).toUpperCase();
+
+      this.cdr.detectChanges();
+    });
   }
 
   logout() {
     auth.signOut();
   }
 
-  get actual(): Recomendacion | null {
-    return this.canciones[this.indice] ?? null;
-  }
-
   siguiente() {
-    this.indice++;
-    if (this.indice >= this.canciones.length) {
-      this.indice = 0;
-    }
+    this.actual = null;
   }
 }

@@ -1,50 +1,59 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { auth as firebaseAuth } from '../../services/firebase.config';
-import { ContentService, Recomendacion } from '../../services/content.service';
+
+import { auth } from '../../services/firebase.config';
+import { onAuthStateChanged } from 'firebase/auth';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-libros',
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './libros.html',
-  styleUrl: './libros.css',
+  styleUrls: ['./libros.css'],
 })
-export class Libros implements OnInit {
+export class Libros {
+
   userName = '';
   userEmail = '';
-  preferencias = { musica: true, libros: true, peliculas: true };
-  userInitial = 'V';
+  userInitial = '';
 
-  libros: Recomendacion[] = [];
-  indice = 0;
+  preferencias = {
+    musica: false,
+    libros: false,
+    peliculas: false
+  };
 
-  constructor(private content: ContentService) {}
+  actual: any = null;
 
-  async ngOnInit() {
-    const user = firebaseAuth.currentUser;
-    const email = user?.email ?? '';
-    this.userEmail = email;
-    this.userName = user?.displayName ?? email.split('@')[0] ?? '';
-    this.userInitial = email ? email.charAt(0).toUpperCase() : 'V';
-    this.libros = await this.content.recibidasPor('libros', email);
+  constructor(
+    private userService: UserService,
+    private cdr: ChangeDetectorRef
+  ) {
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) return;
+
+      const perfil = await this.userService.obtenerUsuario(user.uid);
+
+      if (perfil) {
+        this.userName = perfil.usuario;
+        this.userEmail = perfil.email;
+        this.preferencias = perfil.preferencias;
+      }
+
+      this.userInitial = this.userName.charAt(0).toUpperCase();
+
+      this.cdr.detectChanges();
+    });
   }
 
   logout() {
-    firebaseAuth.signOut();
-  }
-
-  get actual(): Recomendacion | null {
-    return this.libros[this.indice] ?? null;
+    auth.signOut();
   }
 
   siguiente() {
-    this.indice++;
-
-    // Si llega al final, reinicia
-    if (this.indice >= this.libros.length) {
-      this.indice = 0;
-    }
+    // tu lógica
   }
 }

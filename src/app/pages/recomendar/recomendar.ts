@@ -1,97 +1,100 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+
 import { auth } from '../../services/firebase.config';
-import { ContentService, Recomendacion, Usuario } from '../../services/content.service';
+import { onAuthStateChanged } from 'firebase/auth';
+import { ContentService, TipoContenido, Usuario } from '../../services/content.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-recomendar',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './recomendar.html',
   styleUrls: ['./recomendar.css'],
 })
-export class Recomendar implements OnInit {
+export class Recomendar {
+
   userName = '';
   userEmail = '';
-  preferencias = { musica: true, libros: true, peliculas: true };
-  userInitial = 'V';
+  userInitial = '';
 
-  tipo: 'musica' | 'libros' | 'pelis' = 'musica';
+  preferencias = {
+    musica: false,
+    libros: false,
+    peliculas: false
+  };
+
+  tipo: TipoContenido = 'musica';
+  etiquetaAutor = 'Artista / autor';
   titulo = '';
-  genero = '';
   autor = '';
+  genero = '';
   portada = '';
   destinatarioEmail = '';
   usuarios: Usuario[] = [];
   errorMsg = '';
   exito = false;
 
-  constructor(private content: ContentService) {}
+  constructor(
+    private userService: UserService,
+    private contentService: ContentService,
+    private cdr: ChangeDetectorRef
+  ) {
 
-  ngOnInit() {
-    const user = auth.currentUser;
-    const email = user?.email ?? '';
-    this.userEmail = email;
-    this.userName = user?.displayName ?? email.split('@')[0] ?? '';
-    this.userInitial = email ? email.charAt(0).toUpperCase() : 'V';
-    this.usuarios = this.content.listaUsuarios(email);
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) return;
+
+      const perfil = await this.userService.obtenerUsuario(user.uid);
+
+      if (perfil) {
+        this.userName = perfil.usuario;
+        this.userEmail = perfil.email;
+        this.preferencias = perfil.preferencias;
+      }
+
+      this.userInitial = this.userName.charAt(0).toUpperCase();
+      this.usuarios = this.contentService.listaUsuarios(this.userEmail);
+
+      this.cdr.detectChanges();
+    });
   }
 
-  logout() {
-    auth.signOut();
-  }
-
-  get etiquetaAutor(): string {
-    switch (this.tipo) {
-      case 'musica':
-        return 'Artista';
-      case 'libros':
-        return 'Autor';
-      case 'pelis':
-        return 'Director';
-      default:
-        return 'Autor';
-    }
-  }
-
-  elegirTipo(tipo: 'musica' | 'libros' | 'pelis') {
+  elegirTipo(tipo: TipoContenido) {
     this.tipo = tipo;
-    this.errorMsg = '';
-    this.exito = false;
+    this.etiquetaAutor = tipo === 'musica' ? 'Artista' : tipo === 'pelis' ? 'Director / actor principal' : 'Autor';
   }
 
-  async enviar() {
-    if (!this.titulo.trim() || !this.genero.trim() || !this.autor.trim() || !this.destinatarioEmail) {
-      this.errorMsg = 'Completa todos los campos obligatorios.';
+  enviar() {
+    if (!this.titulo.trim() || !this.autor.trim() || !this.genero.trim() || !this.destinatarioEmail.trim()) {
+      this.errorMsg = 'Completa todos los campos obligatorios y elige un destinatario.';
       this.exito = false;
       return;
     }
 
-    const nuevaRecomendacion: Recomendacion = {
+    this.errorMsg = '';
+
+    this.contentService.enviarRecomendacion({
       tipo: this.tipo,
       titulo: this.titulo.trim(),
       autor: this.autor.trim(),
       genero: this.genero.trim(),
       portada: this.portada.trim(),
-      deNombre: auth.currentUser?.displayName ?? 'Yo',
+      deNombre: this.userName || 'Usuario',
       destinatarioEmail: this.destinatarioEmail,
-    };
+    });
 
-    this.errorMsg = '';
+    this.exito = true;
+    this.titulo = '';
+    this.autor = '';
+    this.genero = '';
+    this.portada = '';
+    this.destinatarioEmail = '';
+  }
 
-    try {
-      await this.content.enviarRecomendacion(nuevaRecomendacion);
-      this.exito = true;
-      this.titulo = '';
-      this.genero = '';
-      this.autor = '';
-      this.portada = '';
-      this.destinatarioEmail = '';
-    } catch {
-      this.exito = false;
-      this.errorMsg = 'No se pudo enviar la recomendación. Inténtalo de nuevo.';
-    }
+  logout() {
+    auth.signOut();
   }
 }
