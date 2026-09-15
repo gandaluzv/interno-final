@@ -1,36 +1,137 @@
-<div class="cuenta-container">
+<search-bar></search-bar>
 
-  <h2>Configuración de la cuenta</h2>
+<div class="shell">
 
-  <!-- Información personal -->
-  <div class="card">
-    <h3>Información personal</h3>
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="brand-row">
+      <div><h1 class="wordmark">RYTM</h1></div>
+      <div class="star-badge">✦</div>
+    </div>
 
-    <label>Nombre</label>
-    <input [(ngModel)]="userName" />
+    <div class="user-switcher">
+      <div class="mini-avatar">{{ userInitial }}</div>
+      <div>
+        <p class="us-name">{{ userName }}</p>
+        <p class="us-email">{{ userEmail }}</p>
+      </div>
+    </div>
 
-    <label>Correo</label>
-    <input [value]="userEmail" disabled />
+    <nav class="side-nav">
+      <a routerLink="/home" class="nav-item"><span>🏠</span>Inicio</a>
+      <a *ngIf="preferencias.musica" routerLink="/musica" class="nav-item"><span>🎵</span>Música</a>
+      <a *ngIf="preferencias.libros" routerLink="/libros" class="nav-item"><span>📚</span>Libros</a>
+      <a *ngIf="preferencias.peliculas" routerLink="/pelis" class="nav-item"><span>🎬</span>Películas</a>
+      <a routerLink="/recomendar" class="nav-item"><span>🎁</span>Recomendar</a>
+      <a routerLink="/chat" class="nav-item"><span>💬</span>Chat</a>
+      <a routerLink="/coleccion" class="nav-item"><span>❤️</span>Colección</a>
+    </nav>
 
-    <label>Rol</label>
-    <input [value]="rol" disabled />
+    <div class="sidebar-foot">
+      <a routerLink="/cuenta" class="nav-item on"><span>⚙️</span>Configuración de cuenta</a>
+      <div class="logout-link" (click)="logout()">🚪 Cerrar sesión</div>
+    </div>
+  </aside>
 
-    <button class="btn-save" (click)="guardarNombre()">Guardar nombre</button>
-  </div>
+  <!-- MAIN -->
+  <main class="main">
+    <div class="cuenta-shell">
+
+      <h1>Tu cuenta</h1>
+      <p class="desc">Administra tu perfil y tu información personal.</p>
+
+      <!-- Información personal -->
+      <div class="card">
+        <h2>Información personal</h2>
+
+        <div class="perfil-row">
+          <div class="avatar">
+            <img *ngIf="foto" [src]="foto">
+            <span *ngIf="!foto">{{ userInitial }}</span>
+          </div>
+
+          <div class="perfil-info">
+            <div class="perfil-name">{{ userName }}</div>
+            <div class="perfil-email">{{ userEmail }}</div>
+          </div>
+        </div>
+
+        <div class="input-row">
+          <input type="text" [(ngModel)]="nuevoNombre" placeholder="Nuevo nombre">
+          <button (click)="cambiarNombre()">Guardar</button>
+        </div>
+
+        <div class="input-row">
+          <input type="email" [(ngModel)]="nuevoCorreo" placeholder="Nuevo correo">
+          <button (click)="cambiarCorreo()">Guardar</button>
+        </div>
+
+        <div class="input-row">
+          <input type="password" [(ngModel)]="nuevaPass" placeholder="Nueva contraseña">
+          <button (click)="cambiarPassword()">Guardar</button>
+        </div>
 
 
-  <!-- Seguridad -->
-  <div class="card">
-    <h3>Seguridad</h3>
+      </div>
 
-    <button class="btn-reset" (click)="cambiarPassword()">Cambiar contraseña</button>
-    <button class="btn-delete" (click)="eliminarCuenta()">Eliminar cuenta</button>
-  </div>
+      <!-- Preferencias -->
+      <div class="card">
+        <h2>Preferencias</h2>
 
-  <!-- Sesión -->
-  <div class="card">
-    <h3>Sesión</h3>
-    <button class="btn-logout" (click)="logout()">Cerrar sesión</button>
-  </div>
+        <div class="pref-row">
+          <span>Modo oscuro</span>
+          <label class="switch">
+            <input type="checkbox" [(ngModel)]="modoOscuro" (change)="cambiarModoOscuro()">
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Solicitudes -->
+      <div class="card">
+        <h2>Solicitudes de amistad</h2>
+
+        <div *ngIf="solicitudesPendientes.length === 0" class="no-solicitudes">
+          <p>No tienes solicitudes pendientes.</p>
+        </div>
+
+        <div *ngFor="let sol of solicitudesPendientes" class="sol-card">
+          <div class="sol-info">
+            <p class="sol-text">
+              Solicitud de: <strong>{{ sol.nombreUsuario }}</strong><br>
+              <span class="sol-email">{{ sol.emailUsuario }}</span>
+            </p>
+          </div>
+
+          <div class="sol-actions">
+            <button class="btn-aceptar" (click)="aceptarSolicitud(sol)">Aceptar</button>
+            <button class="btn-rechazar" (click)="rechazarSolicitud(sol)">Rechazar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ⭐ Lista de amigos -->
+<div class="card">
+        <h2>Mis amigos</h2>
+
+        <div *ngIf="amigos.length === 0" class="no-solicitudes">
+          <p>No tienes amigos aún.</p>
+        </div>
+
+        <div class="friend-card" *ngFor="let amigo of amigos">
+          <div class="friend-avatar">
+            <img *ngIf="amigo.foto" [src]="amigo.foto">
+            <span *ngIf="!amigo.foto">{{ amigo.nombre.charAt(0).toUpperCase() }}</span>
+          </div>
+
+          <div class="friend-info">
+            <p class="friend-name">{{ amigo.nombre }}</p>
+            <p class="friend-email">{{ amigo.email }}</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
 
 </div>

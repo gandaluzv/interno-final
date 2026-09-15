@@ -1,11 +1,11 @@
+<search-bar></search-bar>
+
 <div class="shell">
 
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="brand-row">
-      <div>
-        <h1 class="wordmark">RYTM</h1>
-      </div>
+      <div><h1 class="wordmark">RYTM</h1></div>
       <div class="star-badge">✦</div>
     </div>
 
@@ -19,49 +19,43 @@
 
     <nav class="side-nav">
       <a routerLink="/home" class="nav-item"><span>🏠</span>Inicio</a>
-
-      <!-- Preferencias dinámicas -->
-      <a *ngIf="preferencias.musica" routerLink="/musica" class="nav-item">
-        <span>🎵</span>Música
-      </a>
-
-      <a *ngIf="preferencias.libros" routerLink="/libros" class="nav-item">
-        <span>📚</span>Libros
-      </a>
-
-      <a *ngIf="preferencias.peliculas" routerLink="/pelis" class="nav-item">
-        <span>🎬</span>Películas
-      </a>
-
-      <!-- Siempre visibles -->
+      <a *ngIf="preferencias.musica" routerLink="/musica" class="nav-item"><span>🎵</span>Música</a>
+      <a *ngIf="preferencias.libros" routerLink="/libros" class="nav-item"><span>📚</span>Libros</a>
+      <a *ngIf="preferencias.peliculas" routerLink="/pelis" class="nav-item"><span>🎬</span>Películas</a>
       <a routerLink="/recomendar" class="nav-item"><span>🎁</span>Recomendar</a>
       <a routerLink="/chat" class="nav-item on"><span>💬</span>Chat</a>
+      <a routerLink="/coleccion" class="nav-item"><span>❤️</span>Colección</a>
     </nav>
 
     <div class="sidebar-foot">
+      <a routerLink="/cuenta" class="nav-item"><span>⚙️</span>Configuración de cuenta</a>
       <div class="logout-link" (click)="logout()">🚪 Cerrar sesión</div>
     </div>
   </aside>
+
   <!-- MAIN -->
   <main class="main">
+
     <div class="chat-shell" [class.showing-conv]="chatActivoId">
 
       <!-- LISTA DE CHATS -->
       <div class="chat-list-col">
+
         <div class="list-header">
-          <div>
+          <div class="lh-left">
             <h2>Comunidad Rytm</h2>
             <p>Chats y recomendaciones compartidas</p>
           </div>
+
+          <button class="new-chat-btn" (click)="abrirCrearChat()">➕</button>
         </div>
 
         <div class="chat-list">
-          <div
-            class="chat-row"
-            *ngFor="let chat of chats"
-            [class.on]="chat.id === chatActivoId"
-            (click)="abrirChat(chat.id)"
-          >
+          <div class="chat-row"
+               *ngFor="let chat of chats"
+               [class.on]="chat.id === chatActivoId"
+               (click)="abrirChat(chat.id)">
+
             <div class="cr-avatar" [style.background]="chat.color">
               {{ chat.esGrupo ? '👥' : chat.nombre.charAt(0) }}
             </div>
@@ -71,11 +65,66 @@
                 {{ chat.nombre }}
                 <span class="grp-tag" *ngIf="chat.esGrupo">GRUPO</span>
               </div>
-
               <div class="cr-last">{{ ultimoMensaje(chat) }}</div>
             </div>
+
           </div>
         </div>
+
+      </div>
+
+      <!-- ⭐ MODAL MODERNO -->
+      <div class="chat-modal" *ngIf="mostrarCrearChat">
+
+        <div class="chat-modal-box">
+
+          <h2 class="modal-title">Crear Nueva Conversación</h2>
+
+          <div class="chat-tabs">
+            <div class="chat-tab" [class.on]="modoChat==='individual'" (click)="modoChat='individual'">
+              Individual
+            </div>
+            <div class="chat-tab" [class.on]="modoChat==='grupo'" (click)="modoChat='grupo'">
+              Grupo
+            </div>
+          </div>
+
+          <div *ngIf="modoChat==='grupo'" class="field">
+            <label>Nombre del grupo</label>
+            <input type="text" [(ngModel)]="nombreGrupo" placeholder="Ej. Club de Lectura & Cine">
+          </div>
+
+          <label class="sub-label">Seleccionar Participantes</label>
+
+          <div class="user-list">
+
+            <!-- ⭐ CORREGIDO: *ngFor y botón dentro del mismo bloque -->
+            <div class="user-row" *ngFor="let u of amigosData">
+
+              <div class="mini-avatar">
+                {{ obtenerInicial(u) }}
+              </div>
+
+              <div class="user-info">
+                <p class="user-name">{{ u.usuario }}</p>
+                <p class="user-email">{{ u.email }}</p>
+              </div>
+
+              <button class="add-btn" (click)="toggleSeleccion(u)">
+                {{ estaDentro(u) ? '✓' : '+' }}
+              </button>
+
+            </div>
+
+          </div>
+
+          <div class="modal-actions">
+            <button class="cancel-btn" (click)="cerrarCrearChat()">Cancelar</button>
+            <button class="create-btn" (click)="crearChatDesdeModal()">Crear Chat →</button>
+          </div>
+
+        </div>
+
       </div>
 
       <!-- CONVERSACIÓN -->
@@ -87,17 +136,22 @@
         </div>
 
         <div class="conv-msgs">
-
           <ng-container *ngFor="let m of mensajes">
 
             <!-- RECOMENDACIÓN -->
-            <div class="msg recommend-card" [class.me]="m.de === userEmail" *ngIf="m.recomendacion">
+            <div class="msg recommend-card"
+                 [class.me]="m.de === userEmail"
+                 *ngIf="m.recomendacion">
+
               <div class="rc-icon" [style.background]="m.recomendacion.fondo">
                 {{ m.recomendacion.icono }}
               </div>
 
               <div>
-                <span class="sender-tag" *ngIf="m.de !== userEmail && chatActivo.esGrupo">{{ m.de }}</span>
+                <span class="sender-tag"
+                      *ngIf="m.de !== userEmail && chatActivo.esGrupo">
+                      {{ m.de }}
+                </span>
 
                 <div class="rc-tag">
                   Recomendación · {{ etiquetaTipo[m.recomendacion.tipo] }}
@@ -106,28 +160,36 @@
                 <div class="rc-title">{{ m.recomendacion.titulo }}</div>
                 <div class="rc-who">{{ m.recomendacion.quien }}</div>
               </div>
+
             </div>
 
             <!-- MENSAJE NORMAL -->
-            <div class="msg" [class.me]="m.de === userEmail" [class.them]="m.de !== userEmail" *ngIf="!m.recomendacion">
-              <span class="sender-tag" *ngIf="m.de !== userEmail && chatActivo.esGrupo">{{ m.de }}</span>
+            <div class="msg"
+                 [class.me]="m.de === userEmail"
+                 [class.them]="m.de !== userEmail"
+                 *ngIf="!m.recomendacion">
+
+              <span class="sender-tag"
+                    *ngIf="m.de !== userEmail && chatActivo.esGrupo">
+                    {{ m.de }}
+              </span>
+
               {{ m.texto }}
 
               <div class="msg-time">
                 {{ m.fecha?.toDate() | date:'shortTime' }}
               </div>
+
             </div>
 
           </ng-container>
 
-          <div class="typing" *ngIf="typingDelOtro">
-            escribiendo...
-          </div>
-
+          <div class="typing" *ngIf="typingDelOtro">escribiendo...</div>
         </div>
 
-        <!-- SELECTOR DE RECOMENDACIONES -->
+        <!-- SELECTOR -->
         <div class="recommend-picker" *ngIf="mostrarSelector">
+
           <div class="recommend-tabs">
             <div class="rtab" [class.on]="categoriaSelector==='musica'" (click)="elegirCategoria('musica')">🎵 Música</div>
             <div class="rtab" [class.on]="categoriaSelector==='libros'" (click)="elegirCategoria('libros')">📖 Libros</div>
@@ -135,28 +197,30 @@
           </div>
 
           <div class="recommend-items">
-            <div class="recommend-item-row" *ngFor="let item of catalogo[categoriaSelector]" (click)="enviarRecomendacion(item)">
+            <div class="recommend-item-row"
+                 *ngFor="let item of catalogo[categoriaSelector]"
+                 (click)="enviarRecomendacion(item)">
+
               <div class="ri-icon" [style.background]="item.fondo">{{ item.icono }}</div>
+
               <div>
                 <div class="ri-title">{{ item.titulo }}</div>
                 <div class="ri-who">{{ item.quien }}</div>
               </div>
+
             </div>
           </div>
+
         </div>
 
         <!-- INPUT -->
         <div class="conv-input-row">
           <div class="recommend-btn" (click)="toggleSelector()" title="Recomendar contenido">🎁</div>
-
-          <input
-            type="text"
-            [(ngModel)]="nuevoMensaje"
-            (input)="typing()"
-            (keydown.enter)="enviarMensaje()"
-            placeholder="Escribe un mensaje..."
-          />
-
+          <input type="text"
+                 [(ngModel)]="nuevoMensaje"
+                 (input)="typing()"
+                 (keydown.enter)="enviarMensaje()"
+                 placeholder="Escribe un mensaje..." />
           <div class="send-btn" (click)="enviarMensaje()">➤</div>
         </div>
 
@@ -167,6 +231,7 @@
       </ng-template>
 
     </div>
+
   </main>
 
 </div>

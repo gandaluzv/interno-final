@@ -1,23 +1,422 @@
-.cuenta-container {
-  max-width: 600px;
-  margin: auto;
-  padding: 20px;
+:host {
+  --midnight: #0B0F19;
+  --bg: #F8F9FC;
+  --surface: #FFFFFF;
+  --surface-2: #F3F4F6;
+  --hairline: #D1D5DB;
+  --text: #0B0F19;
+  --slate: #6B7280;
+  --purple: #7E22CE;
+  --red: #DC2626;
+  --blue: #2563EB;
+
+  display: block;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: var(--text);
 }
 
-.card {
-  background: #fff;
+* { box-sizing: border-box; }
+
+/* ---------- layout ---------- */
+.shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ---------- sidebar (idéntico al Home) ---------- */
+.sidebar {
+  width: 272px;
+  flex-shrink: 0;
+  background: var(--surface);
+  border-right: 1px solid var(--hairline);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
   padding: 20px;
-  margin-top: 20px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.brand-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.wordmark {
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: -.03em;
+  margin: 0;
+  background: linear-gradient(100deg, var(--red), var(--purple));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.star-badge {
+  width: 30px;
+  height: 30px;
   border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  background: #FAF5FF;
+  color: var(--purple);
+  border: 1px solid #F3E8FF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 13px;
 }
 
-input {
+.user-switcher {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--bg);
+  border: 1px solid var(--hairline);
+  padding: 10px;
+  border-radius: 16px;
+}
+
+.mini-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, var(--purple), var(--red));
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 14px;
+}
+
+.us-name {
+  font-size: 12px;
+  font-weight: 800;
+  margin: 0;
+}
+
+.us-email {
+  font-size: 10.5px;
+  color: var(--slate);
+  margin: 1px 0 0;
+}
+
+.side-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 12px;
+  border-radius: 14px;
+  color: var(--slate);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.nav-item span:first-child {
+  font-size: 15px;
+}
+
+.nav-item:hover {
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.nav-item.on {
+  background: linear-gradient(100deg, rgba(220,38,38,.1), rgba(126,34,206,.1));
+  color: var(--text);
+}
+
+.sidebar-foot {
+  margin-top: auto;
+}
+
+.logout-link {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--red);
+  cursor: pointer;
+  padding: 10px 12px;
+  border-radius: 12px;
+}
+
+.logout-link:hover {
+  background: #FEF2F2;
+}
+
+/* ---------- main ---------- */
+.main {
+  flex: 1;
+  background: var(--bg);
+  padding: 28px 32px 90px;
+  max-width: 1100px;
+}
+
+/* ---------- cuenta ---------- */
+.cuenta-shell {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.cuenta-shell h1 {
+  font-size: 28px;
+  font-weight: 900;
+  margin: 0 0 6px;
+}
+
+.desc {
+  font-size: 14px;
+  color: var(--slate);
+  margin-bottom: 24px;
+}
+
+/* ---------- card ---------- */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: 28px;
+  padding: 26px 30px;
+  margin-bottom: 28px;
+}
+
+.card h2 {
+  font-size: 17px;
+  font-weight: 900;
+  margin: 0 0 16px;
+}
+
+/* ---------- perfil ---------- */
+.perfil-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, var(--purple), var(--red));
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 900;
+  overflow: hidden;
+}
+
+.avatar img {
   width: 100%;
-  margin-bottom: 10px;
-  padding: 8px;
+  height: 100%;
+  object-fit: cover;
 }
 
-button {
-  margin-top: 10px;
+.perfil-name {
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.perfil-email {
+  font-size: 12px;
+  color: var(--slate);
+}
+
+/* ---------- inputs ---------- */
+.input-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.input-row input {
+  flex: 1;
+  padding: 10px 14px;
+  border-radius: 14px;
+  border: 1px solid var(--hairline);
+  background: var(--surface-2);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.input-row button {
+  padding: 10px 14px;
+  border-radius: 14px;
+  border: 1px solid var(--hairline);
+  background: var(--surface-2);
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.input-row button:hover {
+  background: var(--surface);
+}
+
+/* ---------- preferencias ---------- */
+.pref-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.pref-row:last-child {
+  border-bottom: none;
+}
+
+/* ---------- switch ---------- */
+.switch {
+  position: relative;
+  width: 46px;
+  height: 24px;
+}
+
+.switch input {
+  display: none;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  background: var(--hairline);
+  border-radius: 24px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transition: .3s;
+}
+
+.slider:before {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  left: 2px;
+  top: 2px;
+  background: #fff;
+  border-radius: 50%;
+  transition: .3s;
+}
+
+input:checked + .slider {
+  background: var(--purple);
+}
+
+input:checked + .slider:before {
+  transform: translateX(22px);
+}
+
+/* ---------- móvil ---------- */
+@media (max-width: 760px) {
+  .sidebar { display: none; }
+  .main { padding: 20px 18px 90px; }
+}
+.sol-card {
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  padding: 16px;
+  border-radius: 14px;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sol-text {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.sol-actions button {
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.btn-aceptar {
+  background: #22c55e;
+  color: white;
+}
+
+.btn-rechazar {
+  background: #ef4444;
+  color: white;
+}
+
+.no-solicitudes {
+  padding: 10px;
+  font-size: 13px;
+  color: var(--slate);
+}
+
+.friend-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  padding: 14px;
+  border-radius: 18px;
+  margin-bottom: 12px;
+  transition: all .15s ease;
+}
+
+.friend-card:hover {
+  background: var(--surface-2);
+}
+
+.friend-avatar {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--purple), var(--red));
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 18px;
+  overflow: hidden;
+}
+
+.friend-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 14px;
+}
+
+.friend-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.friend-name {
+  font-size: 14px;
+  font-weight: 800;
+  margin: 0;
+  color: var(--text);
+}
+
+.friend-email {
+  font-size: 12px;
+  color: var(--slate);
+  margin: 2px 0 0;
 }

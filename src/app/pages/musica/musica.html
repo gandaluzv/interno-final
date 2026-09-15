@@ -1,3 +1,5 @@
+<search-bar></search-bar>
+
 <div class="shell">
 
   <aside class="sidebar">
@@ -19,7 +21,6 @@
     <nav class="side-nav">
       <a routerLink="/home" class="nav-item"><span>🏠</span>Inicio</a>
 
-      <!-- Preferencias dinámicas -->
       <a *ngIf="preferencias.musica" routerLink="/musica" class="nav-item on">
         <span>🎵</span>Música
       </a>
@@ -32,12 +33,13 @@
         <span>🎬</span>Películas
       </a>
 
-      <!-- Siempre visibles -->
       <a routerLink="/recomendar" class="nav-item"><span>🎁</span>Recomendar</a>
       <a routerLink="/chat" class="nav-item"><span>💬</span>Chat</a>
+      <a routerLink="/coleccion" class="nav-item"><span>❤️</span>Colección</a>
     </nav>
 
     <div class="sidebar-foot">
+      <a routerLink="/cuenta" class="nav-item"><span>⚙️</span>Configuración de cuenta</a>
       <div class="logout-link" (click)="logout()">🚪 Cerrar sesión</div>
     </div>
   </aside>
@@ -55,9 +57,11 @@
 
     <div class="deck" *ngIf="actual; else vacio">
       <div class="poster-card">
+
         <div class="poster-cover">
           <img *ngIf="actual.portada" [src]="actual.portada" alt="" />
           <span *ngIf="!actual.portada" class="poster-fallback">🎵</span>
+
           <div class="poster-vignette"></div>
 
           <span class="poster-badge-top">🎁 De {{ actual.deNombre }}</span>
@@ -70,13 +74,16 @@
         </div>
 
         <div class="poster-body">
-          <p class="poster-desc">Una recomendación que {{ actual.deNombre }} pensó que te iba a gustar.</p>
+          <p class="poster-desc">
+            Una recomendación que {{ actual.deNombre }} pensó que te iba a gustar.
+          </p>
         </div>
 
         <div class="poster-actions">
           <button class="btn-dislike" (click)="siguiente()">✕</button>
-          <button class="btn-like" (click)="siguiente()">❤️</button>
+          <button class="btn-like" (click)="darLike(actual); siguiente()">❤️</button>
         </div>
+
       </div>
     </div>
 
@@ -84,9 +91,7 @@
       <div class="empty-card">
         <div class="empty-icon">✨</div>
         <h3>¡Has explorado todo por ahora!</h3>
-        <p>Revisaste todas las recomendaciones pendientes de música. Puedes reiniciar el feed o mandarle una a alguien.</p>
-        <div class="empty-actions">
-        </div>
+        <p>Revisaste todas las recomendaciones pendientes de música.</p>
       </div>
     </ng-template>
 

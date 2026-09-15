@@ -1,0 +1,115 @@
+<search-bar></search-bar>
+
+<div class="shell">
+
+  <!-- ---------- barra lateral ---------- -->
+  <aside class="sidebar">
+
+    <div class="brand-row">
+      <div>
+        <h1 class="wordmark">RYTM</h1>
+      </div>
+      <div class="star-badge">✦</div>
+    </div>
+
+    <!-- 🔥 Sidebar correcto (igual al Home) -->
+    <div class="user-switcher">
+      <div class="mini-avatar">{{ currentUserInitial }}</div>
+      <div>
+        <p class="us-name">{{ currentUserName }}</p>
+        <p class="us-email">{{ currentUserEmail }}</p>
+      </div>
+    </div>
+
+    <nav class="side-nav">
+      <a routerLink="/home" class="nav-item"><span>🏠</span>Inicio</a>
+
+      <a *ngIf="currentPreferencias.musica" routerLink="/musica" class="nav-item">
+        <span>🎵</span>Música
+      </a>
+
+      <a *ngIf="currentPreferencias.libros" routerLink="/libros" class="nav-item">
+        <span>📚</span>Libros
+      </a>
+
+      <a *ngIf="currentPreferencias.peliculas" routerLink="/pelis" class="nav-item">
+        <span>🎬</span>Películas
+      </a>
+
+      <a routerLink="/recomendar" class="nav-item"><span>🎁</span>Recomendar</a>
+      <a routerLink="/chat" class="nav-item"><span>💬</span>Chat</a>
+      <a routerLink="/coleccion" class="nav-item"><span>❤️</span>Colección</a>
+    </nav>
+
+    <div class="sidebar-foot">
+      <a routerLink="/cuenta" class="nav-item"><span>⚙️</span>Configuración de cuenta</a>
+      <div class="logout-link" (click)="logout()">🚪 Cerrar sesión</div>
+    </div>
+
+  </aside>
+
+  <!-- ---------- contenido principal ---------- -->
+  <main class="main">
+
+    <header class="greet-header">
+      <div>
+        <h1>Perfil de {{ userName }}</h1>
+        <p>Información general del usuario</p>
+      </div>
+
+      <div class="metric-row">
+        <div class="metric"><p class="m-label">Gustos</p><p class="m-value purple">{{ metricGustos }}</p></div>
+        <div class="metric"><p class="m-label">Colección</p><p class="m-value red">{{ metricColeccion }}</p></div>
+        <div class="metric"><p class="m-label">Comunidad</p><p class="m-value blue">{{ metricComunidad }}</p></div>
+      </div>
+    </header>
+
+    <!-- ---------- tarjeta de perfil ---------- -->
+    <div class="perfil-card">
+
+      <div class="perfil-avatar">
+        <img *ngIf="usuario?.foto" [src]="usuario?.foto">
+        <div *ngIf="!usuario?.foto" class="perfil-inicial">
+          {{ userInitial }}
+        </div>
+      </div>
+
+      <h2 class="perfil-nombre">{{ userName }}</h2>
+      <p class="perfil-email">{{ userEmail }}</p>
+
+      <div class="perfil-preferencias">
+        <h3>Preferencias</h3>
+        <ul>
+          <li *ngIf="preferencias.musica">🎵 Música</li>
+          <li *ngIf="preferencias.libros">📚 Libros</li>
+          <li *ngIf="preferencias.peliculas">🎬 Películas</li>
+        </ul>
+      </div>
+
+      <!-- ⭐ BOTÓN DINÁMICO DE AMISTAD -->
+
+      <!-- Ya son amigos -->
+      <button *ngIf="estadoAmistad === 'amigos'" class="btn-amigo disabled">
+        ✔ Ya son amigos
+      </button>
+
+      <!-- Solicitud enviada -->
+      <button *ngIf="estadoAmistad === 'pendiente'" class="btn-amigo disabled">
+        ⏳ Solicitud enviada
+      </button>
+
+      <!-- Solicitud recibida -->
+      <button *ngIf="estadoAmistad === 'recibida'" class="btn-amigo disabled">
+        📩 Solicitud recibida
+      </button>
+
+      <!-- No hay relación -->
+      <button *ngIf="estadoAmistad === 'ninguno'" class="btn-amigo" (click)="enviarSolicitud()">
+        ➕ Enviar solicitud
+      </button>
+
+    </div>
+
+  </main>
+
+</div>

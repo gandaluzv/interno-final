@@ -11,11 +11,11 @@ import { Recomendar } from './pages/recomendar/recomendar';
 import { Prueba } from './pages/prueba/prueba';
 import { Chat } from './pages/chat/chat';
 import { Cuenta} from './pages/cuenta/cuenta';
-
+import { SearchBar } from './pages/search-bar/search-bar';
+import { Coleccion } from './pages/coleccion/coleccion';
 export const routes: Routes = [
     { path: 'home', component: Home, canActivate: [AuthGuard] },
     { path: 'login', component: Login },
-
     { path: 'encuesta', component: Encuesta, canActivate: [AuthGuard] },
     { path: 'musica', component: Musica, canActivate: [AuthGuard] },
     { path: 'pelis', component: Pelis, canActivate: [AuthGuard] },
@@ -24,6 +24,9 @@ export const routes: Routes = [
     { path: 'prueba', component: Prueba, canActivate: [AuthGuard] },
     { path: 'chat', component: Chat, canActivate: [AuthGuard] },
     { path: 'cuenta', component: Cuenta, canActivate: [AuthGuard] },
+    { path: 'coleccion', component: Coleccion, canActivate: [AuthGuard] },
+    { path: 'perfil/:uid', loadComponent: () => import('./pages/perfil/perfil').then(m => m.PerfilPage), canActivate: [AuthGuard] },
+    { path: 'search', component: SearchBar },
 
     { path: '', redirectTo: 'login', pathMatch: 'full' }
 ];

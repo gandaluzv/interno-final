@@ -19,18 +19,9 @@
 .shell { display: flex; min-height: 100vh; }
 
 /* ---------- barra lateral ---------- */
-.sidebar {  width: 272px;
-  flex-shrink: 0;
-  background: var(--surface);
-  border-right: 1px solid var(--hairline);
-  display: flex;
-  flex-direction: column;
-  gap: 16px;              /* antes 24px */
-  padding: 20px;
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  overflow-y: auto; 
+.sidebar {
+  width: 272px; flex-shrink: 0; background: var(--surface); border-right: 1px solid var(--hairline);
+  display: flex; flex-direction: column; gap: 24px; padding: 20px; position: sticky; top: 0; height: 100vh;
 }
 .brand-row { display: flex; align-items: flex-start; justify-content: space-between; }
 .wordmark {
@@ -59,7 +50,7 @@
 .nav-item:hover { background: var(--surface-2); color: var(--text); }
 .nav-item.on { background: linear-gradient(100deg, rgba(220,38,38,.1), rgba(126,34,206,.1)); color: var(--text); }
 
-.sidebar-foot { margin-top: auto;   padding-bottom: 70px;   /* ⭐ sube el logout */}
+.sidebar-foot { margin-top: auto; }
 .logout-link { font-size: 12px; font-weight: 800; color: var(--red); cursor: pointer; padding: 10px 12px; border-radius: 12px; }
 .logout-link:hover { background: #FEF2F2; }
 
@@ -115,4 +106,69 @@
   .sidebar { display: none; }
   .main { padding: 20px 18px 90px; }
   .bottom-nav { display: flex; }
+}
+/* ---------- perfil card ---------- */
+.perfil-card {
+  background: var(--surface); border: 1px solid var(--hairline);
+  border-radius: 28px; padding: 30px; max-width: 420px;
+  margin: 0 auto; text-align: center;
+}
+
+.perfil-avatar img {
+  width: 120px; height: 120px; border-radius: 20px; object-fit: cover;
+}
+
+.perfil-inicial {
+  width: 120px; height: 120px; border-radius: 20px;
+  background: linear-gradient(135deg, var(--purple), var(--red));
+  color: white; display: flex; align-items: center; justify-content: center;
+  font-size: 48px; font-weight: 900;
+}
+
+.perfil-nombre { font-size: 22px; font-weight: 900; margin: 18px 0 4px; }
+.perfil-email { font-size: 13px; color: var(--slate); margin-bottom: 20px; }
+
+.perfil-preferencias h3 { font-size: 15px; font-weight: 900; margin-bottom: 10px; }
+
+.perfil-preferencias ul {
+  list-style: none; padding: 0; font-size: 14px; font-weight: 700; color: var(--text);
+}
+
+.btn-amigo {
+  margin-top: 20px; padding: 12px 20px;
+  background: linear-gradient(100deg, var(--red), var(--purple));
+  color: white; border: none; border-radius: 14px;
+  font-size: 13px; font-weight: 900; cursor: pointer;
+}
+.user-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: #1a1a1a;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.avatar-circle {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #7b2ff7, #f107a3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: bold;
+  color: white;
+}
+
+.user-name {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.user-email {
+  font-size: 13px;
+  opacity: 0.7;
 }

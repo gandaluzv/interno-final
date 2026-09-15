@@ -1,3 +1,5 @@
+<search-bar></search-bar>
+
 <div class="shell">
 
   <!-- ---------- barra lateral (escritorio) ---------- -->
@@ -36,9 +38,11 @@
       <!-- Siempre visibles -->
       <a routerLink="/recomendar" class="nav-item"><span>🎁</span>Recomendar</a>
       <a routerLink="/chat" class="nav-item"><span>💬</span>Chat</a>
+      <a routerLink="/coleccion" class="nav-item"><span>❤️</span>Colección</a>
     </nav>
 
     <div class="sidebar-foot">
+      <a routerLink="/cuenta" class="nav-item"><span>⚙️</span>Configuración de cuenta</a>
       <div class="logout-link" (click)="logout()">🚪 Cerrar sesión</div>
     </div>
   </aside>
@@ -51,11 +55,22 @@
         <h1>¡Hola, {{ userName }}! 👋</h1>
         <p>Hoy tenemos algo especial para tu colección cultural.</p>
       </div>
-      <div class="metric-row">
-        <div class="metric"><p class="m-label">Gustos</p><p class="m-value purple">3 activos</p></div>
-        <div class="metric"><p class="m-label">Colección</p><p class="m-value red">0 likes</p></div>
-        <div class="metric"><p class="m-label">Comunidad</p><p class="m-value blue">3 amigos</p></div>
-      </div>
+<div class="metric-row">
+  <div class="metric">
+    <p class="m-label">Gustos</p>
+    <p class="m-value purple">{{ gustosActivos }} activos</p>
+  </div>
+
+  <div class="metric">
+    <p class="m-label">Colección</p>
+    <p class="m-value red">0 likes</p>
+  </div>
+
+  <div class="metric">
+    <p class="m-label">Comunidad</p>
+    <p class="m-value blue">{{ metricComunidad }}</p>
+  </div>
+</div>
     </header>
 
     <div class="section-head">
@@ -144,3 +159,5 @@
   <a routerLink="/recomendar" class="bn-item"><span>🎁</span>Recomendar</a>
   <a routerLink="/chat" class="bn-item"><span>💬</span>Chat</a>
 </nav>
+
+<router-outlet></router-outlet>

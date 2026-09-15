@@ -1,15 +1,16 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-
-import { auth } from '../../services/firebase.config';
+import { SearchBar } from '../search-bar/search-bar';
+import { auth, db } from '../../services/firebase.config';
 import { onAuthStateChanged } from 'firebase/auth';
 import { UserService } from '../../services/user.service';
+import { collection, doc, getDocs, query, setDoc, where } from 'firebase/firestore';
 
 @Component({
   selector: 'app-libros',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, SearchBar],
   templateUrl: './libros.html',
   styleUrls: ['./libros.css'],
 })
@@ -26,6 +27,8 @@ export class Libros {
   };
 
   actual: any = null;
+  recomendaciones: any[] = [];
+  likesUsuario: any[] = [];
 
   constructor(
     private userService: UserService,
@@ -45,8 +48,60 @@ export class Libros {
 
       this.userInitial = this.userName.charAt(0).toUpperCase();
 
+      await this.cargarLikesUsuario();
+      await this.cargarRecomendaciones();
+      this.filtrarRecomendaciones();
+
       this.cdr.detectChanges();
     });
+  }
+
+  async cargarRecomendaciones() {
+    const q = query(
+      collection(db, 'recomendaciones'),
+      where('destinatarioEmail', '==', this.userEmail),
+      where('tipo', '==', 'libros')
+    );
+
+    const snap = await getDocs(q);
+    this.recomendaciones = snap.docs.map(d => ({ ...d.data(), tipo: 'libros' }));
+    this.actual = this.recomendaciones[0] || null;
+  }
+
+  async cargarLikesUsuario() {
+    const q = query(
+      collection(db, 'likes'),
+      where('usuarioEmail', '==', this.userEmail)
+    );
+
+    const snap = await getDocs(q);
+    this.likesUsuario = snap.docs.map(d => d.data());
+  }
+
+  filtrarRecomendaciones() {
+    this.recomendaciones = this.recomendaciones.filter(rec => {
+      return !this.likesUsuario.some(like =>
+        like.titulo === rec.titulo && like.tipo === rec.tipo
+      );
+    });
+
+    this.actual = this.recomendaciones[0] || null;
+  }
+
+  async darLike(item: any) {
+    const quien = item?.quien || item?.autor || item?.artista || item?.director || 'Autor desconocido';
+    const data = {
+      usuarioEmail: this.userEmail || 'usuario desconocido',
+      tipo: item?.tipo || 'desconocido',
+      titulo: item?.titulo || 'Sin título',
+      quien,
+      descripcion: item?.descripcion || 'Sin descripción disponible',
+      fondo: item?.fondo || '#e5e5e5',
+      icono: item?.icono || '⭐',
+      fecha: Date.now()
+    };
+
+    await setDoc(doc(collection(db, 'likes')), data);
   }
 
   logout() {
@@ -54,6 +109,7 @@ export class Libros {
   }
 
   siguiente() {
-    // tu lógica
+    this.recomendaciones.shift();
+    this.actual = this.recomendaciones[0] || null;
   }
 }

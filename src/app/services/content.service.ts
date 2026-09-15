@@ -11,6 +11,7 @@ import {
 export type TipoContenido = 'musica' | 'libros' | 'pelis';
 
 export interface Usuario {
+  [x: string]: string;
   nombre: string;
   email: string;
 }

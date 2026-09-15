@@ -1,0 +1,17 @@
+<div class="search-shell">
+  <input 
+    type="text"
+    [(ngModel)]="searchQuery"
+    placeholder="Buscar personas..."
+    (input)="buscar()"
+    (keyup.enter)="buscar()"
+  >
+  <button (click)="buscar()">🔍</button>
+</div>
+
+<div class="search-results">
+  <div *ngFor="let p of resultadosPersonas"class="result-item"(click)="abrirPersona(p)">
+    <div class="circle"></div>
+    <span>{{ p.email }}</span>
+  </div>
+</div>

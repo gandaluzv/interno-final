@@ -1,3 +1,5 @@
+<search-bar></search-bar>
+
 <div class="shell">
 
   <aside class="sidebar">
@@ -19,7 +21,6 @@
     <nav class="side-nav">
       <a routerLink="/home" class="nav-item"><span>🏠</span>Inicio</a>
 
-      <!-- Preferencias dinámicas -->
       <a *ngIf="preferencias.musica" routerLink="/musica" class="nav-item">
         <span>🎵</span>Música
       </a>
@@ -32,18 +33,19 @@
         <span>🎬</span>Películas
       </a>
 
-      <!-- Siempre visibles -->
       <a routerLink="/recomendar" class="nav-item on"><span>🎁</span>Recomendar</a>
       <a routerLink="/chat" class="nav-item"><span>💬</span>Chat</a>
+      <a routerLink="/coleccion" class="nav-item"><span>❤️</span>Colección</a>
     </nav>
 
     <div class="sidebar-foot">
+      <a routerLink="/cuenta" class="nav-item"><span>⚙️</span>Configuración de cuenta</a>
       <div class="logout-link" (click)="logout()">🚪 Cerrar sesión</div>
     </div>
   </aside>
 
-
   <main class="main">
+
     <div class="rec-header">
       <div class="rec-header-icon">🎁</div>
       <div>
@@ -53,6 +55,7 @@
     </div>
 
     <div class="form-box">
+
       <div class="tipo-tabs">
         <div class="ttab" [class.on]="tipo==='musica'" (click)="elegirTipo('musica')">🎵 Música</div>
         <div class="ttab" [class.on]="tipo==='libros'" (click)="elegirTipo('libros')">📚 Libro</div>
@@ -61,17 +64,17 @@
 
       <div class="field">
         <label>Título</label>
-        <input type="text" [(ngModel)]="titulo" placeholder="Ej. Midnights" />
-      </div>
+       <input type="text" [(ngModel)]="titulo" [placeholder]="placeholderTitulo" />
+     </div>
 
       <div class="field">
         <label>{{ etiquetaAutor }}</label>
-        <input type="text" [(ngModel)]="autor" placeholder="Ej. Taylor Swift" />
+        <input type="text" [(ngModel)]="autor" [placeholder]="placeholderAutor" />
       </div>
 
       <div class="field">
         <label>Género</label>
-        <input type="text" [(ngModel)]="genero" placeholder="Ej. Pop" />
+        <input type="text" [(ngModel)]="genero" [placeholder]="placeholderGenero" />
       </div>
 
       <div class="field">
@@ -83,7 +86,9 @@
         <label>¿A quién se lo mandas?</label>
         <select [(ngModel)]="destinatarioEmail">
           <option value="" disabled>Elige una persona</option>
-          <option *ngFor="let u of usuarios" [value]="u.email">{{ u.nombre }}</option>
+          <option *ngFor="let u of usuarios" [value]="u['email']">
+            {{ u['usuario'] }}
+          </option>
         </select>
       </div>
 
@@ -91,9 +96,10 @@
       <p class="exito-msg" *ngIf="exito">¡Recomendación enviada! 🎉</p>
 
       <button class="btn-primary" (click)="enviar()">Enviar recomendación →</button>
-    </div>
-  </main>
 
+    </div>
+
+  </main>
 </div>
 
 <nav class="bottom-nav">

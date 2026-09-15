@@ -1,0 +1,132 @@
+<search-bar></search-bar>
+
+<div class="shell">
+
+  <!-- ---------- barra lateral (escritorio) ---------- -->
+  <aside class="sidebar">
+    <div class="brand-row">
+      <div>
+        <h1 class="wordmark">RYTM</h1>
+      </div>
+      <div class="star-badge">✦</div>
+    </div>
+
+    <div class="user-switcher">
+      <div class="mini-avatar">{{ userInitial }}</div>
+      <div>
+        <p class="us-name">{{ userName }}</p>
+        <p class="us-email">{{ userEmail }}</p>
+      </div>
+    </div>
+
+    <nav class="side-nav">
+      <a routerLink="/home" class="nav-item"><span>🏠</span>Inicio</a>
+
+      <!-- Preferencias dinámicas -->
+      <a *ngIf="preferencias.musica" routerLink="/musica" class="nav-item">
+        <span>🎵</span>Música
+      </a>
+
+      <a *ngIf="preferencias.libros" routerLink="/libros" class="nav-item">
+        <span>📚</span>Libros
+      </a>
+
+      <a *ngIf="preferencias.peliculas" routerLink="/pelis" class="nav-item">
+        <span>🎬</span>Películas
+      </a>
+
+      <!-- Siempre visibles -->
+      <a routerLink="/recomendar" class="nav-item"><span>🎁</span>Recomendar</a>
+      <a routerLink="/chat" class="nav-item"><span>💬</span>Chat</a>
+      <a routerLink="/coleccion" class="nav-item on"><span>❤️</span>Colección</a>
+    </nav>
+
+    <div class="sidebar-foot">
+      <a routerLink="/cuenta" class="nav-item"><span>⚙️</span>Configuración de cuenta</a>
+      <div class="logout-link" (click)="logout()">🚪 Cerrar sesión</div>
+    </div>
+  </aside>
+
+  <!-- ---------- contenido principal ---------- -->
+  <main class="main">
+
+    <!-- ---------- saludo ---------- -->
+    <header class="greet-header">
+      <div>
+        <h1>¡Hola, {{ userName }}! 👋</h1>
+        <p>Hoy tenemos algo especial para tu colección cultural.</p>
+      </div>
+
+      <div class="metric-row">
+        <div class="metric">
+          <p class="m-label">Gustos</p>
+          <p class="m-value purple">{{ gustosActivos }} activos</p>
+        </div>
+
+        <div class="metric">
+          <p class="m-label">Colección</p>
+          <p class="m-value red">{{ likesFiltrados.length }} likes</p>
+        </div>
+      </div>
+    </header>
+
+    <!-- ---------- colección cultural ---------- -->
+    <div class="coleccion-shell">
+
+      <h2 class="title">Mi Colección Cultural</h2>
+      <p class="subtitle">{{ likesFiltrados.length }} me gusta</p>
+
+      <!-- Filtros -->
+      <div class="filters">
+        <button [class.on]="filtro==='todos'" (click)="aplicarFiltro('todos')">Todos</button>
+        <button [class.on]="filtro==='musica'" (click)="aplicarFiltro('musica')">Música</button>
+        <button [class.on]="filtro==='libros'" (click)="aplicarFiltro('libros')">Libros</button>
+        <button [class.on]="filtro==='pelis'" (click)="aplicarFiltro('pelis')">Películas</button>
+        <button [class.on]="filtro==='recientes'" (click)="aplicarFiltro('recientes')">Recientes</button>
+      </div>
+
+      <!-- Lista -->
+      <div class="coleccion-grid">
+        <div class="item-card" *ngFor="let item of likesFiltrados">
+
+          <div class="item-icon" [style.background]="item.fondo">
+            {{ item.icono }}
+          </div>
+
+          <div class="item-body">
+            <h3 class="item-title">{{ item.titulo }}</h3>
+            <p class="item-author">{{ item.quien }}</p>
+            <p class="item-type">{{ item.tipo | uppercase }}</p>
+            <p class="item-desc">{{ item.descripcion }}</p>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+</div>
+
+<!-- ---------- barra inferior (móvil) ---------- -->
+<nav class="bottom-nav">
+  <a routerLink="/home" class="bn-item"><span>🏠</span>Inicio</a>
+
+  <a *ngIf="preferencias.musica" routerLink="/musica" class="bn-item">
+    <span>🎵</span>Música
+  </a>
+
+  <a *ngIf="preferencias.libros" routerLink="/libros" class="bn-item">
+    <span>📚</span>Libros
+  </a>
+
+  <a *ngIf="preferencias.peliculas" routerLink="/pelis" class="bn-item">
+    <span>🎬</span>Películas
+  </a>
+
+  <a routerLink="/recomendar" class="bn-item"><span>🎁</span>Recomendar</a>
+  <a routerLink="/chat" class="bn-item"><span>💬</span>Chat</a>
+  <a routerLink="/coleccion" class="bn-item on"><span>❤️</span>Colección</a>
+</nav>
+
+<router-outlet></router-outlet>

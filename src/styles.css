@@ -1,1 +1,30 @@
 /* You can add global styles to this file, and also import other style files */
+
+body {
+	margin: 0;
+	transition: background-color .2s, color .2s;
+}
+
+body.dark-mode {
+	background: #111827;
+	color: #F9FAFB;
+}
+
+body.dark-mode app-home,
+body.dark-mode app-cuenta,
+body.dark-mode app-chat,
+body.dark-mode app-musica,
+body.dark-mode app-pelis,
+body.dark-mode app-libros,
+body.dark-mode app-recomendar {
+	--bg: #111827;
+	--surface: #1F2937;
+	--surface-2: #374151;
+	--hairline: #4B5563;
+	--text: #F9FAFB;
+	--slate: #D1D5DB;
+}
+
+body.dark-mode .logout-link:hover {
+	background: #374151;
+}
